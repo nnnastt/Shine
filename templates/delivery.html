@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Доставка и оплата {% endblock %}
+{% block content %}
+
+<div class="shine-delivery-container">
+  <div class="shine-breadcrumb">
+    <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
+    <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Помощь</a> /
+    <span class="shine-breadcrumb-link">Доставка и оплата</span>
+  </div>
+
+  <div class="shine-delivery-section">
+    <div class="shine-delivery-text">
+      <h2 class="shine-title">Оплата и доставка:</h2>
+      <div class="shine-delivery-description">
+        <p class="shine-paragraph">Заказы по России отправляем курьерскими службами доставки: СДЭК и Почта России. Вы можете выбрать доставку курьером или самовывоз из отделения/постамата.</p>
+        <p class="shine-paragraph">🚚 Отгрузка заказов происходит на следующий день после оплаты товара.</p>
+        <p class="shine-paragraph">💵 Стоимость услуг рассчитывается индивидуально после оформления заказа.</p>
+      </div>
+    </div>
+    <div class="shine-delivery-image">
+      <img src="{% static 'pic/help/deliveryman.png' %}" class="shine-delivery-img" alt="Доставка" />
+    </div>
+  </div>
+
+  <div class="shine-payment-section">
+    <h3 class="shine-title">Осуществить оплату можно следующими способами:</h3>
+    <div class="shine-payment-options">
+      <div class="shine-payment-method">
+        <h4 class="shine-payment-title">💳 Онлайн-оплата на сайте</h4>
+        <p class="shine-paragraph">Скидка 10% на весь заказ при покупке на 20 000 рублей</p>
+        <img src="{% static 'pic/help/VTB.png' %}" class="shine-payment-img" alt="Иконки оплаты">
+        <img src="{% static 'pic/help/sber.png' %}" class="shine-payment-img" alt="Иконки оплаты">
+        <img src="{% static 'pic/help/paytink.png' %}" class="shine-payment-img" alt="Иконки оплаты">
+        <img src="{% static 'pic/help/alfa.png' %}" class="shine-payment-img" alt="Иконки оплаты">
+        <img src="{% static 'pic/help/paysbp.png' %}" class="shine-payment-img" alt="Иконки оплаты">
+      </div>
+    </div>
+  </div>
+
+  <div class="shine-alert">
+    <strong class="shine-alert-strong">Важно!</strong>
+    Бесплатная доставка по всей России при заказе от 20000 рублей или 10% скидка на весь заказ при оплате на сайте. Скидки не суммируются.
+  </div>
+</div>
+
+
+{% endblock %}

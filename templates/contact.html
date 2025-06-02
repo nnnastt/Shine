@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Контакты {% endblock %}
+{% block content %}
+
+<div class="shine-contact-wrapper">
+
+    <div class="shine-breadcrumb">
+    <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
+    <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Помощь</a> /
+    <span class="shine-breadcrumb-link">Доставка и оплата</span>
+  </div>
+    <div class="shine-contact-container">
+        <div class="shine-contact-left">
+            <h1 class="shine-contact-title">Контакты</h1>
+            <p class="shine-contact-subtitle">Звоните или пишите нам по любым вопросам!</p>
+            <p class="shine-contact-phone">+7 (989) 999-99-99</p>
+            <p class="shine-contact-email">shine@gmail.com</p>
+
+            <div class="social-icons">
+                    <i class="social-icon bi bi-instagram"></i>
+                    <i class="social-icon bi bi-twitter"></i>
+                    <i class="social-icon bi bi-youtube"></i>
+            </div>
+
+            <div class="shine-contact-address">
+                <p class="shine-contact-address-title">Магазин находится по адресу:</p>
+                <p class="shine-contact-address-text">
+                    Россия, Санкт-Петербург, Большой проспект<br>
+                    Петроградской стороны, 18, подъезд 2
+                </p>
+            </div>
+
+            <div class="shine-contact-hours">
+                <p class="shine-contact-hours-title">Время работы:</p>
+                <p class="shine-contact-hours-text">
+                    С Понедельника по пятницу 10:00 до 22:00.<br>
+                    Суббота - воскресенье с 10:00 до 20:00
+                </p>
+            </div>
+        </div>
+
+        <div class="shine-contact-right">
+            <p class="shine-form-description">
+                Если у вас есть вопросы, оставьте их в форме ниже
+            </p>
+
+            <form method="post" class="shine-form">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Ваше имя" class="shine-form-input">
+                <input type="email" name="email" placeholder="shine@gmail.com" class="shine-form-input">
+                <textarea name="message" placeholder="Что вас интересует?" class="shine-form-textarea"></textarea>
+                <button type="submit" class="shine-form-submit">Отправить</button>
+                <p class="shine-form-privacy">
+                    Нажимая на кнопку "Отправить", вы соглашаетесь с политикой конфиденциальности и правилами обработки персональных данных
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

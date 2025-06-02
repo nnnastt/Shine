@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ category.name }} | Shine
+{% endblock %}
+
+{% block content %}
+<div class="shine-category-section">
+<div class="shine-breadcrumb">
+    <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
+    <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Каталог</a> /
+    <span class="shine-breadcrumb-link">{{ category.name }}</span>
+  </div>
+    <div class="shine-category-header">
+        <h1 class="shine-category-title">{{ category.name }}</h1>
+    </div>
+    <div class="shine-sort-controls">
+            <span>Сортировать по:</span>
+    </div>
+    <div class="sort-menu">
+
+        <div class="sort-dropdown">
+            <button class="sort-button">Цена</button>
+            <div class="sort-options">
+                <a href="?sort=price_desc{% if current_material %}&material={{ current_material }}{% endif %}"
+                   {% if current_sort == 'price_desc' %}class='active'{% endif %}>По возрастанию</a>
+                <a href="?sort=price_asc{% if current_material %}&material={{ current_material }}{% endif %}"
+                   {% if current_sort == 'price_asc' %}class='active'{% endif %}>По убыванию</a>
+                <a href="?{% if current_material %}material={{ current_material }}{% endif %}">Отменить</a>
+            </div>
+        </div>
+
+        <!-- СОРТИРОВКА ПО ПОПУЛЯРНОСТИ -->
+        <div class="sort-dropdown">
+            <button class="sort-button">Популярность</button>
+            <div class="sort-options">
+                <a href="?sort=popularity_desc{% if current_material %}&material={{ current_material }}{% endif %}"
+                   {% if current_sort == 'popularity_desc' %}class='active'{% endif %}>По возрастанию</a>
+                <a href="?sort=popularity_asc{% if current_material %}&material={{ current_material }}{% endif %}"
+                   {% if current_sort == 'popularity_asc' %}class='active'{% endif %}>По убыванию</a>
+                <a href="?{% if current_material %}material={{ current_material }}{% endif %}">Отменить</a>
+            </div>
+        </div>
+
+        <!-- ФИЛЬТР ПО ВИДУ (ЗОЛОТО / СЕРЕБРО) -->
+        <div class="sort-dropdown">
+            <button class="sort-button">Вид</button>
+            <div class="sort-options">
+                <a href="?material=gold{% if current_sort %}&sort={{ current_sort }}{% endif %}"
+                   {% if current_material == "gold" %}class="active"{% endif %}>Золото</a>
+                <a href="?material=silver{% if current_sort %}&sort={{ current_sort }}{% endif %}"
+                   {% if current_material == "silver" %}class="active"{% endif %}>Серебро</a>
+                <a href="?{% if current_sort %}sort={{ current_sort }}{% endif %}">Отменить</a>
+            </div>
+        </div>
+    </div>
+
+<div class="shine-category-wrapper">
+
+    <!-- Список товаров -->
+    {% if products %}
+        <div class="shine-product-list">
+            {% for product in products %}
+               <div class="shine-product-item {% if not product.is_active or product.quantity == 0 %}not-available{% endif %}">
+    {% if product.is_active and product.quantity > 0 %}
+        <a href="{% url 'product_view' product.pk %}" class="shine-product-link">
+    {% else %}
+        <div class="shine-product-link">
+    {% endif %}
+        <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="shine-product-img">
+        <h3 class="shine-product-name">{{ product.name_product }}</h3>
+    {% if product.is_active and product.quantity > 0 %}
+        </a>
+    {% else %}
+        </div>
+    {% endif %}
+
+    <div class="shine-product-meta">
+        {% if product.is_active and product.quantity > 0 %}
+            <span class="shine-product-price">{{ product.price_with_currency|safe }}</span>
+        {% else %}
+            <span class="shine-product-unavailable">Нет в наличии</span>
+        {% endif %}
+    </div>
+</div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="shine-no-products-msg">В данной категории пока нет товаров.</p>
+    {% endif %}
+</div>
+{% endblock %}

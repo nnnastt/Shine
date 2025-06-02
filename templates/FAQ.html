@@ -1,0 +1,142 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Вопрос-Ответ {% endblock %}
+{% block content %}
+<div class="shine-faq-container">
+
+  <div class="breadcrumb">
+    <a href="{% url 'main'%}" class="breadcrumb-a">Главная</a> /
+    <a href="{% url 'helper'%}" class="breadcrumb-a">Помощь</a> /
+    <span>FAQ</span>
+  </div>
+
+  <h1 class="faq-title">Часто задаваемые вопросы</h1>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Вы гарантируете качество?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Чтобы обеспечить высокое качество и подлинность каждого изделия, мы сотрудничаем с байерами из Европы и Азии, которые закупают товары непосредственно у производителей
+      <br>
+      <br>
+          Наши консультанты проводят экспертизу каждого третьего изделия с целью контроля качества товара
+      </p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Что включает в себя упаковка?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Подарочная упаковка состоит из брендированного пакета, коробки, пыльника, индивидуальной карточки изделия и инструкции по уходу в комплекте к каждому украшению.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Оплата на сайте?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Вы можете оплатить онлайн на сайте банковской картой, СБП или SberPay. Доставке при оплате онлайн бесплатная по всей России.
+      <br>
+      <br>
+          При получении на пункте выдачи СДЭК или при курьере СДЭК вы можете осмотреть и примерить украшения. Если какие-то украшения вам не подошли, то вы можете отказаться от части заказа до подписания документов о вручении. После поступления возврата на наш склад, мы осуществим возврат денежных средств за часть заказа на вашу карту, с которой была покупка.
+          При доставке Почтой Росси невозможно отказаться от части заказа или примерить украшения на выбор.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Могу ли я заказать несколько изделий?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Мы даем своим покупателям выбор, но не больше 6 изделий в заказе.
+      Осмотреть и примерить можно при курьере или на пункте самовывоза курьерской компании СДЭК.
+      Невозможно примерить и выбрать только при доставке Почтой РФ.
+
+      </p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Как отследить свой заказ?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Сразу после оформления заказа на сайте, вы перейдете в чат с персональным менеджером, который пришлет трек-номер для отслеживания. Отследить посылку вы сможете в личном кабинете СДЭК или Почта РФ</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Сколько стоит доставка?
+      <div class="faq-icon-wrapper">
+        <i class="bi bi-plus faq-icon"></i>
+      </div>
+    </div>
+    <div class="faq-answer">
+      <p>Бесплатная доставка по всей России и 5% скидка на весь заказ при оплате заказа сразу на сайте. Скидки не суммируются.
+      <br>
+      <br>
+          Стоимость доставки зависит от региона и выбранной курьерской службы.
+          Рассчитать стоимость доставки можно при оформлении заказа.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    faqItems.forEach(item => {
+      const question = item.querySelector(".faq-question");
+      const icon = item.querySelector(".faq-icon");
+
+      question.addEventListener("click", () => {
+        const isOpen = item.classList.contains("open");
+
+        // Переключаем только текущий элемент
+        if (isOpen) {
+          item.classList.remove("open");
+          icon.className = "bi bi-plus faq-icon";
+        } else {
+          item.classList.add("open");
+          icon.className = "bi bi-x faq-icon";
+        }
+      });
+
+      question.addEventListener("mouseenter", () => {
+        const isOpen = item.classList.contains("open");
+        if (!icon) return;
+        icon.className = isOpen ? "bi bi-x-circle-fill faq-icon" : "bi bi-plus-circle-fill faq-icon";
+      });
+
+      question.addEventListener("mouseleave", () => {
+        const isOpen = item.classList.contains("open");
+        if (!icon) return;
+        icon.className = isOpen ? "bi bi-x faq-icon" : "bi bi-plus faq-icon";
+      });
+    });
+  });
+</script>
+{% endblock %}

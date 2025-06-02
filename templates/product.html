@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name_product }} | Shine{% endblock %}
+
+{% block content %}
+<div class="nova-product-container">
+
+  <div class="nova-product-card">
+    <div class="nova-left">
+      <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="nova-product-img">
+    </div>
+
+    <div class="nova-right">
+      <div class="shine-breadcrumb">
+        <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
+        <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Каталог</a> 
+      </div>
+      <h1 class="nova-product-title">{{ product.name_product }}</h1>
+
+      <p class="nova-product-price">{{ product.price }} ₽</p>
+
+      {% if request.user.is_authenticated %}
+        {% if product in wishlist_products %}
+          <form action="" method="post" class="nova-inline-form">
+            {% csrf_token %}<button class="nova-heart active">♥</button>
+          </form>
+        {% else %}
+          <form action="" method="post" class="nova-inline-form">
+            {% csrf_token %}<button class="nova-heart">♡</button>
+          </form>
+        {% endif %}
+
+        {% if product in cart_products %}
+          <form action="" method="post" class="nova-inline-form">
+            {% csrf_token %}<button class="nova-btn-buy">Убрать из корзины</button>
+          </form>
+        {% else %}
+          <form action="" method="post" class="nova-inline-form">
+            {% csrf_token %}<button class="nova-btn-buy">Купить</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <a href="" class="nova-login-link">
+          Войдите, чтобы купить или добавить в избранное
+        </a>
+      {% endif %}
+
+      <details class="nova-details-section">
+        <summary class="nova-summary">Детали</summary>
+        <div class="nova-details-content">
+          <p>{{ info.info|linebreaks }}</p>
+        </div>
+      </details>
+
+      <details class="nova-details-section">
+  <summary class="nova-summary">Советы и предупреждения</summary>
+  <div class="nova-details-content">
+    {% if warnings %}
+      <ul>
+        {% for warn in warnings %}
+          <li><strong>{{ warn.title }}:</strong> {{ warn.content }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Нет дополнительных предупреждений.</p>
+    {% endif %}
+  </div>
+</details>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
