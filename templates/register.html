@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Регистрация | Shine {% endblock %}
+{% block content %}
+<div class="register-wrapper">
+  <div class="register-box">
+    <div class="register-header">
+      <i class="register-icon">&#x1F5A4;</i>
+      <h2>Регистрация</h2>
+      <i class="register-icon">&#x1F5A4;</i>
+    </div>
+
+    <form method="POST" action="{% url 'register' %}">
+      {% csrf_token %}
+      {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="register-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <p class="register-error">{{ field.errors|striptags }}</p>
+        {% endif %}
+      {% endfor %}
+
+      <button type="submit" class="register-button">Зарегистрироваться</button>
+    </form>
+
+    <div class="register-footer">
+      <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+    </div>
+  </div>
+</div>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#id_phone').mask('+7(000)-000-00-00');
+    });
+  </script>
+{% endblock %}

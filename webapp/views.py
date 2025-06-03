@@ -1,11 +1,10 @@
-from importlib.resources import read_text
-
 from django.shortcuts import render,redirect
-from webapp.models import TypeProduct, ViewProduct, InfoProduct, ProductDetail, ProductWarning, Wishlist, Cart
+from webapp.forms import RegisterForm
+from webapp.models import TypeProduct, ViewProduct, InfoProduct, ProductDetail, ProductWarning, Wishlist, Cart, UserInfo
 from django.shortcuts import get_object_or_404
 from django.db.models import Case, When, Value, IntegerField
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
+from django.contrib import messages
 # Create your views here.
 def index(request):
     categories = TypeProduct.objects.all().order_by('order')
@@ -98,35 +97,32 @@ def product_view(request, pk):
         'warnings': warnings,
     })
 
-@login_required
-def add_to_wishlist(request, product_id):
-    product = get_object_or_404(ViewProduct, id=product_id)
-    wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
-    wishlist.add_product(product)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
-@login_required
-def remove_from_wishlist(request, product_id):
-    product = get_object_or_404(ViewProduct, id=product_id)
-    wishlist = get_object_or_404(Wishlist, user=request.user)
-    wishlist.remove_product(product)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
-@login_required
-def add_to_cart(request, product_id):
-    product = get_object_or_404(ViewProduct, id=product_id)
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart.add_product(product)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-
-@login_required
-def remove_from_cart(request, product_id):
-    product = get_object_or_404(ViewProduct, id=product_id)
-    cart = get_object_or_404(Cart, user=request.user)
-    cart.remove_product(product)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def logout_view(request):
     logout(request)
     return redirect('main')
+
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('main')
+    form = RegisterForm()
+    if request.method == 'POST':
+        form=RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            first_name = request.POST['first_name'],
+            last_name = request.POST['last_name'],
+            middle_name = request.POST['middle_name'],
+            phone = request.POST['phone'],
+            birth_date = request.POST['birth_date']
+            userinfo = UserInfo(user=user,first_name = first_name,last_name=last_name,middle_name=middle_name,phone=phone,birth_date=birth_date)
+            userinfo.save()
+
+            login(request, user)
+            messages.success(request, 'Регистрация прошла успешно!')
+            return redirect('profile')
+
+    context={'form':form}
+    return render(request,'register.html',context)
