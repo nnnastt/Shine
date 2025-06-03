@@ -440,9 +440,3 @@ class CartItem(models.Model):
         return self.product.price * self.quantity
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_user_related_models(sender, instance, created, **kwargs):
-    if created:
-        UserInfo.objects.create(user=instance)
-        Cart.objects.create(user=instance)
-        Wishlist.objects.create(user=instance)
