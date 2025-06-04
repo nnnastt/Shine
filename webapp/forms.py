@@ -4,7 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 from datetime import date, timedelta
 from django.core.exceptions import ValidationError
 
-class RegisterForm(UserCreationForm ):
+from webapp.models import UserInfo, PaymentCard, UserAddress
+
+
+class RegisterForm(UserCreationForm):
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={
             "class": "form-control",
@@ -70,10 +73,10 @@ class RegisterForm(UserCreationForm ):
             raise forms.ValidationError("Дата рождения не может быть в будущем")
 
         return birth_date
+
     class Meta:
         model = User
-        fields = ["username","first_name", "last_name", "middle_name", "birth_date","phone", "password1", "password2" ]
-
+        fields = ["username", "first_name", "last_name", "middle_name", "birth_date", "phone", "password1", "password2"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -93,8 +96,45 @@ class RegisterForm(UserCreationForm ):
         self.fields["password1"].label = "Пароль"
 
         self.fields["password2"].widget.attrs.update({
-             "class": "input-field",
+            "class": "input-field",
             "type": "password",
+            "title": "Не менее 8 символов",
         })
         self.fields["password2"].label = "Подтверждение пароля"
 
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserInfo
+        fields = ['first_name', 'last_name', 'middle_name', 'phone', 'birth_date', 'avatar']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
+            'phone': forms.TextInput(attrs={'placeholder': '+7(XXX)-XXX-XX-XX'}),
+        }
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = UserAddress
+        fields = ['address_line1', 'address_line2', 'city', 'postal_code', 'country', 'is_default']
+        widgets = {
+            'address_line1': forms.TextInput(attrs={'placeholder': 'Улица, дом, квартира'}),
+            'address_line2': forms.TextInput(attrs={'placeholder': 'Дополнительная информация'}),
+            'postal_code': forms.TextInput(attrs={'placeholder': 'Почтовый индекс'}),
+        }
+
+
+class PaymentCardForm(forms.ModelForm):
+    class Meta:
+        model = PaymentCard
+        fields = ['card_holder', 'card_number', 'expiry_month', 'expiry_year', 'cvv', 'card_type', 'is_default']
+        widgets = {
+            'card_number': forms.TextInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX'}),
+            'expiry_month': forms.NumberInput(attrs={'placeholder': 'MM', 'min': 1, 'max': 12}),
+            'expiry_year': forms.NumberInput(attrs={'placeholder': 'YYYY', 'min': date.today().year}),
+            'cvv': forms.TextInput(attrs={'placeholder': 'XXX', 'maxlength': 4}),
+        }
+
+class AvatarUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserInfo
+        fields = ['avatar']

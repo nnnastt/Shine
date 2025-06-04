@@ -9,8 +9,8 @@
 <div class="shine-category-section">
 <div class="shine-breadcrumb">
     <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
-    <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Каталог</a> /
-    <span class="shine-breadcrumb-link">{{ category.name }}</span>
+    <a href="{% url 'catalog' %}" class="shine-breadcrumb-link">Каталог</a> /
+    <span class="shine-breadcrumb-link"> {{ category.name }} </span>
   </div>
     <div class="shine-category-header">
         <h1 class="shine-category-title">{{ category.name }}</h1>
@@ -63,27 +63,27 @@
         <div class="shine-product-list">
             {% for product in products %}
                <div class="shine-product-item {% if not product.is_active or product.quantity == 0 %}not-available{% endif %}">
-    {% if product.is_active and product.quantity > 0 %}
-        <a href="{% url 'product_view' product.pk %}" class="shine-product-link">
-    {% else %}
-        <div class="shine-product-link">
-    {% endif %}
-        <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="shine-product-img">
-        <h3 class="shine-product-name">{{ product.name_product }}</h3>
-    {% if product.is_active and product.quantity > 0 %}
-        </a>
-    {% else %}
-        </div>
-    {% endif %}
+                    {% if product.is_active and product.quantity > 0 %}
+                        <a href="{% url 'product_view' product.pk %}?category_id={{ category.id }}" class="shine-product-item shine-product-link">
+                    {% else %}
+                        <div class="shine-product-link">
+                    {% endif %}
+                        <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="shine-product-img">
+                        <h3 class="shine-product-name">{{ product.name_product }}</h3>
+                    {% if product.is_active and product.quantity > 0 %}
+                        </a>
+                    {% else %}
+                        </div>
+                    {% endif %}
 
-    <div class="shine-product-meta">
-        {% if product.is_active and product.quantity > 0 %}
-            <span class="shine-product-price">{{ product.price_with_currency|safe }}</span>
-        {% else %}
-            <span class="shine-product-unavailable">Нет в наличии</span>
-        {% endif %}
-    </div>
-</div>
+                    <div class="shine-product-meta">
+                        {% if product.is_active and product.quantity > 0 %}
+                            <span class="shine-product-price">{{ product.price_with_currency|safe }}</span>
+                        {% else %}
+                            <span class="shine-product-unavailable">Нет в наличии</span>
+                        {% endif %}
+                    </div>
+                </div>
             {% endfor %}
         </div>
     {% else %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Каталог | Shine {% endblock %}
+{% block content %}
+{% for category, products in category_products %}
+<section class="catalog-section">
+    <div class="catalog-header">
+        <h2 class="catalog-title">{{ category.name }}</h2>
+        <a href="{{ category.get_absolute_url }}" class="catalog-button">Открыть все</a>
+    </div>
+    <div class="catalog-row">
+        {% for product in products %}
+        <a href="{{ product.get_absolute_url }}" class="catalog-card">
+            <img src="{{ product.product.url }}" class="catalog-img" alt="{{ product.name_product }}">
+            <div class="catalog-info">
+                <p class="catalog-name">{{ product.name_product|upper }}</p>
+                <p class="catalog-price">{{ product.price_with_currency|safe }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <hr class="catalog-divider">
+</section>
+{% endfor %}
+
+{% endblock %}

@@ -2,90 +2,97 @@
 {% load static %}
 {% block title %} Главная | Shine {% endblock %}
 {%block content%}
-  <!-- Баннер -->
-  <section class="homepage-hero homepage-hero-bg" style="background-image: url('{% static 'pic/landing/3.png' %}');">
-      <div class="homepage-container">
-          <div class="homepage-hero-content">
-              <h1 class="homepage-hero-heading">Весна - Лето</h1>
-              <p class="homepage-hero-description">Откройте для себя наши украшения Shine</p>
-              <a href="{% url 'news' %}" class="homepage-hero-cta">Купить сейчас</a>
-          </div>
-      </div>
+<!-- Баннер -->
+<section class="homepage-hero homepage-hero-bg" style="background-image: url('{% static 'pic/landing/3.png' %}');">
+    <div class="homepage-container">
+        <div class="homepage-hero-content">
+            <h1 class="homepage-hero-heading">Весна - Лето</h1>
+            <p class="homepage-hero-description">Откройте для себя наши украшения Shine</p>
+            <a href="{% url 'news' %}" class="homepage-hero-cta">Купить сейчас</a>
+        </div>
+    </div>
     <a href="#categories" class="hero-scroll-down">
-          <i class="bi bi-chevron-compact-down"></i>
-      </a>
-  </section>
-
-  <!-- Категории -->
-<section id="categories" class="jewelry-categories-section">
-  <div class="categories-main-container">
-    <div class="categories-header-wrapper">
-      <h2 class="categories-main-title">Категории</h2>
-      <p class="categories-subtitle-text">Не отказывайте себе</p>
-    </div>
-    <div class="jewelry-items-container">
-      {% for category in categories %}
-      <div class="single-jewelry-category">
-        <a href="{% url 'product_list_by_category' category.id %}" class="view-category-link">
-          <div class="category-image-wrapper">
-            <img src="{{ category.image.url }}" class="category-preview-image" alt="{{ category.name }}">
-            <div class="category-overlay">
-              <div class="category-content">
-                <h3 class="jewelry-category-name">{{ category.name }}</h3>
-                <div class="arrow-icon-wrapper">
-                  <i class="bi bi-arrow-down-right-circle"></i>
-                  <i class="bi bi-arrow-right-circle-fill"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+        <i class="bi bi-chevron-compact-down"></i>
+    </a>
 </section>
 
-  <!-- О нас -->
-  <section class="company-story-section">
+<!-- Категории -->
+<section id="categories" class="jewelry-categories-section">
+    <div class="categories-main-container">
+        <div class="categories-header-wrapper">
+            <h2 class="categories-main-title">Категории</h2>
+            <p class="categories-subtitle-text">Не отказывайте себе</p>
+        </div>
+        <div class="jewelry-items-container">
+            {% for category in categories %}
+            <div class="single-jewelry-category">
+                <a href="{% url 'product_list_by_category' category.id %}" class="view-category-link">
+                    <div class="category-image-wrapper">
+                        <img src="{{ category.image.url }}" class="category-preview-image" alt="{{ category.name }}">
+                        <div class="category-overlay">
+                            <div class="category-content">
+                                <h3 class="jewelry-category-name">{{ category.name }}</h3>
+                                <div class="arrow-icon-wrapper">
+                                    <i class="bi bi-arrow-down-right-circle"></i>
+                                    <i class="bi bi-arrow-right-circle-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- О нас -->
+<section class="company-story-section">
     <div class="about-company-container">
-      <div class="about-content-wrapper">
-        <div class="company-image-section">
-          <img src="{% static 'pic/landing/hero2.png' %}" class="about-company-visual" alt="О компании">
+        <div class="about-content-wrapper">
+            <div class="company-image-section">
+                <img src="{% static 'pic/landing/hero2.png' %}" class="about-company-visual" alt="О компании">
+            </div>
+            <div class="company-text-section">
+                <h2 class="company-mission-title">Для чего мы были созданы?</h2>
+                <p class="company-description-paragraph">
+                    Украшения Shine не просто аксессуары, они становятся выразительным средством для передачи философии
+                    и идеалов самого дизайнера. Они помогают изменять стереотипы и восприятие моды и красоты.
+                    Эти украшения стали символом независимости, свободы и индивидуальности, отражая современное
+                    стремление к самовыражению и аутентичности. Использование разнообразных материалов: дизайнер не
+                    боится экспериментировать с материалами.
+                    Эти украшения могут быть сделаны из металла, кожи, пластика, стекла и даже натуральных материалов.
+                    Это придает им уникальный и разнообразный внешний вид.<br>
+                    Эксклюзивность и коллекционность: Украшения Shine часто выпускаются в ограниченных количествах, что
+                    делает их еще более желанными для коллекционеров и ценителей марки.
+                    Украшения Shine - это произведения искусства, которые выражают индивидуальность, смелость и страсть
+                    к жизни. Они являются источником вдохновения для многих модных ценителей.<br>
+                </p>
+                <a href="{% url 'about' %}" class="learn-more-button">Подробнее</a>
+            </div>
         </div>
-        <div class="company-text-section">
-          <h2 class="company-mission-title">Для чего мы были созданы?</h2>
-          <p class="company-description-paragraph">
-            Украшения Shine не просто аксессуары, они становятся выразительным средством для передачи философии и идеалов самого дизайнера. Они помогают изменять стереотипы и восприятие моды и красоты.
-            Эти украшения стали символом независимости, свободы и индивидуальности, отражая современное стремление к самовыражению и аутентичности. Использование разнообразных материалов: дизайнер не боится экспериментировать с материалами.
-            Эти украшения могут быть сделаны из металла, кожи, пластика, стекла и даже натуральных материалов. Это придает им уникальный и разнообразный внешний вид.<br>
-            Эксклюзивность и коллекционность: Украшения Shine часто выпускаются в ограниченных количествах, что делает их еще более желанными для коллекционеров и ценителей марки.
-            Украшения Shine - это произведения искусства, которые выражают индивидуальность, смелость и страсть к жизни. Они являются источником вдохновения для многих модных ценителей.<br>
-          </p>
-          <a href="{% url 'about' %}" class="learn-more-button">Подробнее</a>
-        </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- Подарок + Условия доставки -->
-  <section class="main-section" >
+<!-- Подарок + Условия доставки -->
+<section class="main-section">
     <div class="promo-block" style="background-image: url('{% static 'pic/landing/hero3.1.png' %}');">
-      <div class="promo-content">
-        <h2 class="promo-title">Подарок сезона</h2>
-        <p class="promo-text">
-          Встречай весну с Shine! До конца апреля — 20% на коллекцию украшений.
-        </p>
-        <a href="{% url 'gift' %}" class="promo-button">Купить</a>
-      </div>
+        <div class="promo-content">
+            <h2 class="promo-title">Подарок сезона</h2>
+            <p class="promo-text">
+                Встречай весну с Shine! До конца апреля — 20% на коллекцию украшений.
+            </p>
+            <a href="{% url 'gift' %}" class="promo-button">Купить</a>
+        </div>
     </div>
 
-    <div class="delivery-block" style="background-image: url('{% static 'pic/landing/hero3.3.svg' %}'); background-repeat: no-repeat; background-position: right; background-size: contain; filter: brightness(0.94);">
-      <h3 class="delivery-title">Условия доставки и оплаты</h3>
-      <p class="delivery-text">
-        Здесь у вас есть возможность ознакомиться с условиями доставки и оплаты
-      </p>
-      <a href="{% url 'delivery' %}" class="delivery-button">Подробнее</a>
+    <div class="delivery-block"
+         style="background-image: url('{% static 'pic/landing/hero3.3.svg' %}'); background-repeat: no-repeat; background-position: right; background-size: contain; filter: brightness(0.94);">
+        <h3 class="delivery-title">Условия доставки и оплаты</h3>
+        <p class="delivery-text">
+            Здесь у вас есть возможность ознакомиться с условиями доставки и оплаты
+        </p>
+        <a href="{% url 'delivery' %}" class="delivery-button">Подробнее</a>
     </div>
-  </section>
+</section>
 {% endblock %}

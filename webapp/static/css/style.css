@@ -1193,10 +1193,7 @@ margin: auto;
 }
 
 .shine-product-item {
-    border: 1px solid #ddd;
-    border-radius: 16px;
     padding: 16px;
-    background-color: #fff;
     transition: transform 0.3s ease;
 }
 
@@ -1357,111 +1354,171 @@ margin: auto;
 
 
 /*--------------------------------------------------------------------------- СТРАНИЦА ОБ ИНФОРМАЦИИ О ТОВАРЕ -------------------------------------------------------------------------------------------------------------*/
-.nova-product-container {
-  max-width: 1820px;
+
+.productpage-container {
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 100px 20px;
+  padding: 150px 20px;
+  color: #2a2a2a;
 }
 
-.nova-product-card {
+.productpage-flex-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #fff;
-  padding: 1.5rem;
+  gap: 48px;
+  align-items: flex-start;
 }
 
-.nova-left {
+.productpage-img-col {
   flex: 1;
+  max-width: 420px;
+}
+
+.productpage-swiper {
+  pointer-events: none;
+  width: 100%;
   max-width: 400px;
 }
 
-.nova-product-img {
+.productpage-img {
+  pointer-events: none;
   width: 100%;
-  border-radius: 12px;
   object-fit: contain;
+  border: none;
+  border-radius: 0;
+  padding: 0;
 }
 
-.nova-right {
+.productpage-info-col {
   flex: 2;
-  min-width: 300px;
+  min-width: 320px;
 }
 
-.nova-product-title {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #222;
+.productpage-breadcrumbs {
+    font-family: "Bellota", system-ui;
+  font-size: 17px;
+  color: #999;
+  margin-bottom: 24px;
 }
 
-.nova-product-price {
-  font-size: 1.5rem;
-  color: #9F2042;
-  margin-bottom: 1rem;
-  font-weight: 600;
+.productpage-breadcrumb-link {
+  color: #999;
+  text-decoration: none;
+  margin-right: 6px;
 }
 
-.nova-inline-form {
-  display: inline-block;
-  margin-right: 1rem;
+.productpage-title {
+font-family: "Great Vibes", cursive;
+  font-size: 35px;
+  font-weight: 400;
+  margin-bottom: 12px;
 }
 
-.nova-btn-buy {
-  padding: 0.5rem 1.2rem;
-  background-color: #9F2042;
+.productpage-price {
+font-family: "Bellota", system-ui;
+  font-size: 19px;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.productpage-description {
+font-family: "Bellota", system-ui;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 620px;
+}
+
+.productpage-buy-btn {
+font-family: "Bellota", system-ui;
+  padding: 10px 24px;
+  background-color: #000;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  font-size: 16px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  margin-bottom: 32px;
 }
 
-.nova-btn-buy:hover {
-  background-color: #7a1630;
+.productpage-buy-btn-fav-btn{
+padding:15px 0;
+
+}
+.productpage-fav-form {
+  display: inline-block;
+  margin-left: 10px;
 }
 
-.nova-heart {
+.productpage-fav-btn {
   font-size: 24px;
   background: none;
   border: none;
   color: #ccc;
   cursor: pointer;
   transition: color 0.3s ease;
-  padding: 0 6px;
-  line-height: 1;
+  vertical-align: middle;
+  padding: 0;
 }
 
-.nova-heart.active {
+.productpage-fav-btn.active {
   color: #9F2042;
 }
 
-.nova-details-section {
-  margin-top: 1rem;
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
+.productpage-details {
+  border-top: 1px solid #ddd;
+  padding-top: 24px;
+  margin-top: 32px;
 }
 
-.nova-summary {
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-.nova-details-content {
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-  color: #555;
-}
-
-.nova-login-link {
-  color: #9F2042;
-  text-decoration: underline;
+.productpage-summary {
+font-family: "Bellota", system-ui;
   font-weight: 600;
-  display: inline-block;
-  margin-top: 1rem;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.productpage-details-content {
+font-family: "Bellota", system-ui;
+  font-size: 15px;
+  color: #555;
+  padding-left: 16px;
+}
+
+.productpage-login-note {
+font-family: "Bellota", system-ui;
+  margin-top: 24px;
+  font-style: italic;
+  color: #9F2042;
+}
+
+.product-detail-table {
+
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.product-detail-table td {
+  padding: 6px 10px;
+  vertical-align: top;
+}
+
+.detail-label {
+font-family: "Bellota", system-ui;
+  width: 200px;
+  font-weight: 600;
+  color: #444;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.detail-value {
+  text-align: left;
+  color: #222;
 }
 
 /*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ ИНФЫ -------------------------------------------------------------------------------------------------------------*/
@@ -1691,3 +1748,607 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /*--------------------------------------------------------------------------- АДАПТАЦИЯ РЕГИСТРАЦИИ -------------------------------------------------------------------------------------------------------------*/
 
+
+/*--------------------------------------------------------------------------- КАТАЛОГ -------------------------------------------------------------------------------------------------------------*/
+.catalog-section {
+  margin: auto;
+    max-width:1720px;
+    padding: 120px 20px 40px 20px;
+}
+
+.catalog-header {
+   display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.catalog-title {
+    font-family: "Great Vibes", cursive;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.catalog-button {
+display: inline-block;
+  padding: 10px 10px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  font-family: "Bellota", system-ui;
+  transition: 0.3s;
+}
+
+.catalog-button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  color:white;
+}
+
+.catalog-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.catalog-card {
+  width: 300px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+}
+
+.catalog-card:hover {
+    transform: scale(1.03);
+}
+.catalog-img {
+    pointer-events: none;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.catalog-info {
+  margin-top: 10px;
+}
+
+.catalog-name {
+  font-family: "Bellota", system-ui;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.catalog-price {
+  font-family: "Bellota", system-ui;
+  font-size: 13px;
+  color: #666;
+}
+
+.catalog-divider {
+  margin-top: 30px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/*--------------------------------------------------------------------------- АДАПТАЦИЯ КАТАЛОГ -------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------- НОВИНКИ -------------------------------------------------------------------------------------------------------------*/
+.new-section {
+    margin: auto;
+    max-width:1720px;
+    padding: 120px 20px 40px 20px;
+}
+
+.new-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.new-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.new-category-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 35px;
+}
+
+.new-button {
+ display: inline-block;
+  padding: 10px 10px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  font-family: "Bellota", system-ui;
+  transition: 0.3s;
+}
+
+.new-button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  color:white;
+}
+
+.new-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.new-card {
+  width: 300px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+}
+
+.new-card:hover {
+  transform: scale(1.03);
+}
+
+.new-img {
+pointer-events: none;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.new-info {
+  margin-top: 10px;
+}
+
+.new-name {
+  font-family: "Bellota", system-ui;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.new-price {
+  font-family: "Bellota", system-ui;
+  font-size: 13px;
+  color: #666;
+  position: relative;
+}
+
+.new-label {
+font-family: "Bellota", system-ui;
+  display: inline-block;
+  margin-left: 6px;
+  background-color: crimson;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.new-divider {
+  margin-top: 30px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/*--------------------------------------------------------------------------- АДАПТАЦИЯ НОВИНКИ -------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------- ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
+.shine-profile-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    gap: 30px;
+    padding: 100px 0;
+}
+
+.shine-profile-sidebar {
+    flex: 0 0 300px;
+}
+
+.shine-profile-content {
+    flex: 1;
+}
+
+.shine-profile-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.shine-avatar-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.shine-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.shine-profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f8f8f8;
+}
+
+.shine-default-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    color: #ccc;
+    border: 3px solid #f8f8f8;
+}
+
+.shine-avatar-upload-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    color: #555;
+}
+
+#id_avatar {
+    display: none;
+}
+
+.shine-profile-info h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: #333;
+}
+
+.shine-profile-info p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.shine-profile-info i {
+    margin-right: 8px;
+    color: #8b5e3c;
+}
+
+.shine-profile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.shine-profile-nav li {
+    margin-bottom: 5px;
+}
+
+.shine-profile-nav a {
+    display: block;
+    padding: 12px 15px;
+    color: #555;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.shine-profile-nav a:hover, .shine-profile-nav a.shine-nav-active {
+    background: #f8f8f8;
+    color: #8b5e3c;
+}
+
+.shine-profile-nav i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.shine-profile-section {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.shine-profile-section.shine-section-active {
+    display: block;
+}
+
+.shine-profile-section h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #333;
+    font-weight: 500;
+}
+
+.shine-profile-form .shine-form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.shine-profile-form .shine-form-row .shine-form-group {
+    flex: 1;
+}
+
+.shine-form-group {
+    margin-bottom: 20px;
+}
+
+.shine-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.shine-form-group input, .shine-form-group select, .shine-form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.shine-btn-save {
+    background: #8b5e3c;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.shine-btn-save:hover {
+    background: #705B4F;
+}
+
+.shine-addresses-list, .shine-cards-list, .shine-orders-list {
+    margin-bottom: 30px;
+}
+
+.shine-address-card, .shine-card-item, .shine-order-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.shine-address-card.shine-default-address, .shine-card-item.shine-default-card {
+    border-left: 4px solid #8b5e3c;
+}
+
+.shine-address-content p, .shine-card-info p {
+    margin: 5px 0;
+}
+
+.shine-address-actions, .shine-card-actions {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.shine-btn-set-default {
+    background: none;
+    border: 1px solid #8b5e3c;
+    color: #8b5e3c;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shine-btn-set-default:hover {
+    background: #8b5e3c;
+    color: white;
+}
+
+.shine-default-badge {
+    background: #8b5e3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.shine-empty-message {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-size: 16px;
+}
+
+.shine-btn-add-new {
+    background: none;
+    border: 1px dashed #8b5e3c;
+    color: #8b5e3c;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.shine-btn-add-new:hover {
+    background: rgba(139, 94, 60, 0.1);
+}
+
+.shine-address-form-container, .shine-card-form-container {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.shine-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.shine-btn-cancel {
+    background: #f0f0f0;
+    color: #555;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.shine-btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.shine-card-icon {
+    font-size: 40px;
+    margin-right: 15px;
+    float: left;
+}
+
+.shine-visa-icon {
+    color: #1a1f71;
+}
+
+.shine-mastercard-icon {
+    color: #eb001b;
+}
+
+.shine-mir-icon {
+    color: #1e5f8a;
+}
+
+.shine-card-info {
+    overflow: hidden;
+}
+
+.shine-card-type {
+    font-weight: 500;
+    color: #333;
+}
+
+.shine-card-number, .shine-card-expiry {
+    color: #666;
+    font-size: 14px;
+}
+
+.shine-order-card {
+    transition: all 0.2s;
+}
+
+.shine-order-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shine-order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.shine-order-number {
+    font-weight: 500;
+    color: #333;
+}
+
+.shine-order-date {
+    color: #888;
+    font-size: 14px;
+}
+
+.shine-order-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shine-order-status {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+.shine-order-total {
+    font-weight: 500;
+    color: #333;
+}
+
+.shine-btn-view {
+    color: #8b5e3c;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.shine-btn-view:hover {
+    text-decoration: underline;
+}
+
+.shine-empty-orders {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.shine-empty-orders i {
+    font-size: 50px;
+    color: #ddd;
+    margin-bottom: 15px;
+}
+
+.shine-empty-orders p {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.shine-btn-shopping {
+    background: #8b5e3c;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.shine-btn-shopping:hover {
+    background: #705B4F;
+    color: white;
+}
+/*--------------------------------------------------------------------------- АДАПТАЦИЯ ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/

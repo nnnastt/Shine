@@ -2,7 +2,32 @@
 {% load static %}
 {% block title %} Новинки | Shine {% endblock %}
 {% block content %}
+<section class="new-section">
+    <h2 class="new-title">Новинки</h2>
 
+    {% for category, products in products_by_category.items %}
+    <div class="new-header">
+        <h3 class="new-category-title">{{ category.name }}</h3>
+        <a href="{% url 'product_list_by_category' category.id %}?sort=new" class="new-button">Смотреть всё</a>
+    </div>
 
+    <div class="new-row">
+        {% for product in products %}
+        <a href="{{ product.get_absolute_url }}" class="new-card">
+            <img src="{{ product.product.url }}" class="new-img" alt="{{ product.name_product }}">
+            <div class="new-info">
+                <div class="new-name">{{ product.name_product }}</div>
+                <div class="new-price">
+                    {{ product.final_price }} ₽
+                    <span class="new-label">Новинка!</span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <hr class="new-divider">
+    {% endfor %}
+</section>
 
 {% endblock %}

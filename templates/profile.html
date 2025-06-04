@@ -2,7 +2,358 @@
 {% load static %}
 {% block title %} Профиль | Shine {% endblock %}
 {% block content %}
+<div class="shine-profile-container">
+    <div class="shine-profile-sidebar">
+        <!-- Аватар и основная информация -->
+        <div class="shine-profile-card">
+            <div class="shine-avatar-section">
+                <form method="post" enctype="multipart/form-data" id="shine-avatar-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="update_avatar" value="1">
+                    <div class="shine-avatar-wrapper">
+                        {% if user_info.avatar %}
+                        <img src="{{ user_info.avatar.url }}" alt="Аватар" class="shine-profile-avatar" id="shine-avatar-preview">
+                        {% else %}
+                        <div class="shine-default-avatar" id="shine-avatar-preview">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        {% endif %}
+                        <label for="id_avatar" class="shine-avatar-upload-btn">
+                            <i class="bi bi-camera-fill"></i>
+                            <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display: none;">
+                        </label>
+                    </div>
+                </form>
+            </div>
 
+            <div class="shine-profile-info">
+                <h2>{{ user_info.full_name }}</h2>
+                <p><i class="bi bi-envelope"></i> {{ user.email }}</p>
+                {% if user_info.phone %}
+                    <p><i class="bi bi-telephone"></i> {{ user_info.phone }}</p>
+                {% endif %}
+                {% if user_info.birth_date %}
+                    <p><i class="bi bi-calendar"></i> {{ user_info.birth_date|date:"d.m.Y" }}</p>
+                {% endif %}
+            </div>
+        </div>
 
+        <!-- Навигация по профилю -->
+        <nav class="shine-profile-nav">
+            <ul>
+                <li><a href="#shine-personal-info" class="shine-nav-active"><i class="bi bi-person"></i> Личные данные</a></li>
+                <li><a href="#shine-addresses"><i class="bi bi-house"></i> Адреса</a></li>
+                <li><a href="#shine-payment-methods"><i class="bi bi-credit-card"></i> Платежные методы</a></li>
+                <li><a href="#shine-orders"><i class="bi bi-bag"></i> Мои заказы</a></li>
+            </ul>
+        </nav>
+    </div>
 
+    <div class="shine-profile-content">
+        <!-- Личные данные -->
+        <section id="shine-personal-info" class="shine-profile-section shine-section-active">
+            <h2>Личные данные</h2>
+            <form method="post" class="shine-profile-form">
+                {% csrf_token %}
+                <input type="hidden" name="update_profile" value="1">
+                <div class="shine-form-row">
+                    <div class="shine-form-group">
+                        <label>Имя</label>
+                        {{ profile_form.first_name }}
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Фамилия</label>
+                        {{ profile_form.last_name }}
+                    </div>
+                </div>
+                <div class="shine-form-group">
+                    <label>Отчество</label>
+                    {{ profile_form.middle_name }}
+                </div>
+                <div class="shine-form-row">
+                    <div class="shine-form-group">
+                        <label>Телефон</label>
+                        {{ profile_form.phone }}
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Дата рождения</label>
+                        {{ profile_form.birth_date }}
+                    </div>
+                </div>
+                <button type="submit" class="shine-btn-save">Сохранить изменения</button>
+            </form>
+        </section>
+
+        <!-- Адреса -->
+        <section id="shine-addresses" class="shine-profile-section">
+            <h2>Мои адреса</h2>
+            <div class="shine-addresses-list">
+                {% for address in addresses %}
+                <div class="shine-address-card {% if address.is_default %}shine-default-address{% endif %}">
+                    <div class="shine-address-content">
+                        <p><strong>{{ address.address_line1 }}</strong></p>
+                        {% if address.address_line2 %}<p>{{ address.address_line2 }}</p>{% endif %}
+                        <p>{{ address.city }}, {{ address.postal_code }}, {{ address.country }}</p>
+                    </div>
+                    <div class="shine-address-actions">
+                        {% if not address.is_default %}
+                        <form method="post" action="{% url 'set_default_address' address.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="shine-btn-set-default">Сделать основным</button>
+                        </form>
+                        {% else %}
+                        <span class="shine-default-badge">Основной</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="shine-empty-message">У вас пока нет сохраненных адресов</p>
+                {% endfor %}
+            </div>
+
+            <button class="shine-btn-add-new" id="shine-show-address-form">+ Добавить новый адрес</button>
+
+            <div class="shine-address-form-container" id="shine-address-form-container">
+                <h3>Добавить адрес</h3>
+                <form method="post" class="shine-address-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="add_address" value="1">
+                    <div class="shine-form-group">
+                        <label>Улица, дом, квартира</label>
+                        {{ address_form.address_line1 }}
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Дополнительная информация (необязательно)</label>
+                        {{ address_form.address_line2 }}
+                    </div>
+                    <div class="shine-form-row">
+                        <div class="shine-form-group">
+                            <label>Город</label>
+                            {{ address_form.city }}
+                        </div>
+                        <div class="shine-form-group">
+                            <label>Почтовый индекс</label>
+                            {{ address_form.postal_code }}
+                        </div>
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Страна</label>
+                        {{ address_form.country }}
+                    </div>
+                    <div class="shine-form-check">
+                        {{ address_form.is_default }}
+                        <label class="shine-form-check-label">Сделать основным адресом</label>
+                    </div>
+                    <div class="shine-form-actions">
+                        <button type="submit" class="shine-btn-save">Сохранить адрес</button>
+                        <button type="button" class="shine-btn-cancel" id="shine-hide-address-form">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Платежные методы -->
+        <section id="shine-payment-methods" class="shine-profile-section">
+            <h2>Платежные методы</h2>
+            <div class="shine-cards-list">
+                {% for card in cards %}
+                <div class="shine-card-item {% if card.is_default %}shine-default-card{% endif %}">
+                    <div class="shine-card-icon">
+                        {% if card.card_type == 'visa' %}
+                        <i class="bi bi-credit-card-2-front-fill shine-visa-icon"></i>
+                        {% elif card.card_type == 'mastercard' %}
+                        <i class="bi bi-credit-card-2-front-fill shine-mastercard-icon"></i>
+                        {% elif card.card_type == 'mir' %}
+                        <i class="bi bi-credit-card-2-front-fill shine-mir-icon"></i>
+                        {% else %}
+                        <i class="bi bi-credit-card-2-front-fill"></i>
+                        {% endif %}
+                    </div>
+                    <div class="shine-card-info">
+                        <p class="shine-card-type">{{ card.get_card_type_display }}</p>
+                        <p class="shine-card-number">{{ card.masked_number }}</p>
+                        <p class="shine-card-expiry">Срок: {{ card.expiry_date }}</p>
+                    </div>
+                    <div class="shine-card-actions">
+                        {% if not card.is_default %}
+                        <form method="post" action="{% url 'set_default_card' card.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="shine-btn-set-default">Сделать основной</button>
+                        </form>
+                        {% else %}
+                        <span class="shine-default-badge">Основная</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="shine-empty-message">У вас пока нет сохраненных карт</p>
+                {% endfor %}
+            </div>
+
+            <button class="shine-btn-add-new" id="shine-show-card-form">+ Добавить новую карту</button>
+
+            <div class="shine-card-form-container" id="shine-card-form-container">
+                <h3>Добавить платежную карту</h3>
+                <form method="post" class="shine-card-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="add_card" value="1">
+                    <div class="shine-form-group">
+                        <label>Тип карты</label>
+                        {{ card_form.card_type }}
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Имя владельца</label>
+                        {{ card_form.card_holder }}
+                    </div>
+                    <div class="shine-form-group">
+                        <label>Номер карты</label>
+                        {{ card_form.card_number }}
+                    </div>
+                    <div class="shine-form-row">
+                        <div class="shine-form-group">
+                            <label>Месяц окончания</label>
+                            {{ card_form.expiry_month }}
+                        </div>
+                        <div class="shine-form-group">
+                            <label>Год окончания</label>
+                            {{ card_form.expiry_year }}
+                        </div>
+                        <div class="shine-form-group">
+                            <label>CVV</label>
+                            {{ card_form.cvv }}
+                        </div>
+                    </div>
+                    <div class="shine-form-check">
+                        {{ card_form.is_default }}
+                        <label class="shine-form-check-label">Сделать основной картой</label>
+                    </div>
+                    <div class="shine-form-actions">
+                        <button type="submit" class="shine-btn-save">Сохранить карту</button>
+                        <button type="button" class="shine-btn-cancel" id="shine-hide-card-form">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Заказы -->
+        <section id="shine-orders" class="shine-profile-section">
+            <h2>Мои заказы</h2>
+            {% if orders %}
+            <div class="shine-orders-list">
+                {% for order in orders %}
+                <div class="shine-order-card">
+                    <div class="shine-order-header">
+                        <span class="shine-order-number">Заказ #{{ order.id }}</span>
+                        <span class="shine-order-date">{{ order.created_at|date:"d.m.Y" }}</span>
+                    </div>
+                    <div class="shine-order-body">
+                        <div class="shine-order-summary">
+                            <span class="shine-order-status">{{ order.get_status_display }}</span>
+                            <span class="shine-order-total">{{ order.total_price }} ₽</span>
+                        </div>
+                        <div class="shine-order-actions">
+                            <a href="{% url 'order_detail' order.id %}" class="shine-btn-view">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="shine-empty-orders">
+                <i class="bi bi-bag"></i>
+                <p>У вас пока нет заказов</p>
+                <a href="{% url 'catalog' %}" class="shine-btn-shopping">Начать покупки</a>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Переключение между разделами профиля
+        const shineNavLinks = document.querySelectorAll('.shine-profile-nav a');
+        const shineSections = document.querySelectorAll('.shine-profile-section');
+
+        shineNavLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Удаляем активный класс у всех ссылок и секций
+                shineNavLinks.forEach(navLink => navLink.classList.remove('shine-nav-active'));
+                shineSections.forEach(section => section.classList.remove('shine-section-active'));
+
+                // Добавляем активный класс к текущей ссылке
+                this.classList.add('shine-nav-active');
+
+                // Показываем соответствующую секцию
+                const targetId = this.getAttribute('href').substring(1);
+                document.getElementById(targetId).classList.add('shine-section-active');
+            });
+        });
+
+        // Форма добавления адреса
+        const shineShowAddressFormBtn = document.getElementById('shine-show-address-form');
+        const shineHideAddressFormBtn = document.getElementById('shine-hide-address-form');
+        const shineAddressFormContainer = document.getElementById('shine-address-form-container');
+
+        if (shineShowAddressFormBtn && shineHideAddressFormBtn && shineAddressFormContainer) {
+            shineShowAddressFormBtn.addEventListener('click', function() {
+                shineAddressFormContainer.style.display = 'block';
+                this.style.display = 'none';
+            });
+
+            shineHideAddressFormBtn.addEventListener('click', function() {
+                shineAddressFormContainer.style.display = 'none';
+                shineShowAddressFormBtn.style.display = 'block';
+            });
+        }
+
+        // Форма добавления карты
+        const shineShowCardFormBtn = document.getElementById('shine-show-card-form');
+        const shineHideCardFormBtn = document.getElementById('shine-hide-card-form');
+        const shineCardFormContainer = document.getElementById('shine-card-form-container');
+
+        if (shineShowCardFormBtn && shineHideCardFormBtn && shineCardFormContainer) {
+            shineShowCardFormBtn.addEventListener('click', function() {
+                shineCardFormContainer.style.display = 'block';
+                this.style.display = 'none';
+            });
+
+            shineHideCardFormBtn.addEventListener('click', function() {
+                shineCardFormContainer.style.display = 'none';
+                shineShowCardFormBtn.style.display = 'block';
+            });
+        }
+
+        // Превью аватара
+        const shineAvatarInput = document.getElementById('id_avatar');
+        const shineAvatarPreview = document.getElementById('shine-avatar-preview');
+        const shineAvatarForm = document.getElementById('shine-avatar-form');
+
+        if (shineAvatarInput && shineAvatarPreview) {
+            shineAvatarInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        if (shineAvatarPreview.tagName === 'IMG') {
+                            shineAvatarPreview.src = e.target.result;
+                        } else {
+                            // Если это div с иконкой, заменяем его на img
+                            const newAvatar = document.createElement('img');
+                            newAvatar.src = e.target.result;
+                            newAvatar.className = 'shine-profile-avatar';
+                            newAvatar.id = 'shine-avatar-preview';
+                            shineAvatarPreview.parentNode.replaceChild(newAvatar, shineAvatarPreview);
+                        }
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                    shineAvatarForm.submit();
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

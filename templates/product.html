@@ -4,71 +4,106 @@
 {% block title %}{{ product.name_product }} | Shine {% endblock %}
 
 {% block content %}
-<div class="nova-product-container">
+<div class="productpage-container">
+    <div class="productpage-flex-wrapper">
 
-  <div class="nova-product-card">
-    <div class="nova-left">
-      <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="nova-product-img">
-    </div>
-
-    <div class="nova-right">
-      <div class="shine-breadcrumb">
-        <a href="{% url 'main' %}" class="shine-breadcrumb-link">Главная</a> /
-        <a href="{% url 'helper' %}" class="shine-breadcrumb-link">Каталог</a> 
-      </div>
-      <h1 class="nova-product-title">{{ product.name_product }}</h1>
-
-      <p class="nova-product-price">{{ product.price }} ₽</p>
-
-      {% if request.user.is_authenticated %}
-        {% if product in wishlist_products %}
-          <form action="" method="post" class="nova-inline-form">
-            {% csrf_token %}<button class="nova-heart active">♥</button>
-          </form>
-        {% else %}
-          <form action="" method="post" class="nova-inline-form">
-            {% csrf_token %}<button class="nova-heart">♡</button>
-          </form>
-        {% endif %}
-
-        {% if product in cart_products %}
-          <form action="" method="post" class="nova-inline-form">
-            {% csrf_token %}<button class="nova-btn-buy">Убрать из корзины</button>
-          </form>
-        {% else %}
-          <form action="" method="post" class="nova-inline-form">
-            {% csrf_token %}<button class="nova-btn-buy">Купить</button>
-          </form>
-        {% endif %}
-      {% else %}
-        <a href="" class="nova-login-link">
-          Войдите, чтобы купить или добавить в избранное
-        </a>
-      {% endif %}
-
-      <details class="nova-details-section">
-        <summary class="nova-summary">Детали</summary>
-        <div class="nova-details-content">
-          <p>{{ info.info|linebreaks }}</p>
+        <div class="productpage-img-col">
+            {% if product.product2 %}
+            <div class="swiper productpage-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="productpage-img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="{{ product.product2.url }}" alt="{{ product.name_product }} второе фото"
+                             class="productpage-img">
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <img src="{{ product.product.url }}" alt="{{ product.name_product }}" class="productpage-img">
+            {% endif %}
         </div>
-      </details>
 
-      <details class="nova-details-section">
-  <summary class="nova-summary">Советы и предупреждения</summary>
-  <div class="nova-details-content">
-    {% if warnings %}
-      <ul>
-        {% for warn in warnings %}
-          <li><strong>{{ warn.title }}:</strong> {{ warn.content }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Нет дополнительных предупреждений.</p>
-    {% endif %}
-  </div>
-</details>
+        <div class="productpage-info-col">
+            {% if category and category.id %}
+            <div class="productpage-breadcrumbs">
+                <a href="{% url 'product_list_by_category' category.id %}" class="productpage-breadcrumb-link">
+                    Назад
+                </a>
+            </div>
+            {% endif %}
+
+            <h1 class="productpage-title">{{ product.name_product }}</h1>
+
+            <p class="productpage-price">
+                {{ product.price_with_currency|safe }}
+            </p>
+
+
+
+            <div class="productpage-description">
+                {{ product.detailed_info.info }}
+
+
+            {% if request.user.is_authenticated %}
+            <form action="" method="post" class="productpage-buy-btn-fav-btn">
+                {% csrf_token %}
+                <button class="productpage-buy-btn">Купить</button>
+                <button type="submit"
+                        class="productpage-fav-btn {% if product in wishlist_products %}active{% endif %}">
+                    {% if product in wishlist_products %}♥{% else %}♡{% endif %}
+                </button>
+            </form>
+            {% else %}
+            <p class="productpage-login-note">Войдите, чтобы купить или добавить в избранное</p>
+            {% endif %}
+
+            <details class="productpage-details">
+                <summary class="productpage-summary">Состав и характеристики</summary>
+                <div class="productpage-details-content">
+                    {% for detail in product.detailed_info.details.all %}
+                    <p>{{ detail.content|linebreaks }}</p>
+                    {% empty %}
+                    <p>Нет детальной информации.</p>
+                    {% endfor %}
+                </div>
+            </details>
+
+            <details class="productpage-details">
+                <summary class="productpage-summary">Советы и предупреждения</summary>
+                <div class="productpage-details-content">
+                    {% with product.detailed_info.warnings.all as warnings %}
+                    {% if warnings %}
+                    <ul>
+                        {% for warn in warnings %}
+                        <li> {{ warn.content }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>Нет дополнительных предупреждений.</p>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </details>
+        </div>
     </div>
-  </div>
 </div>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    const swiperEl = document.querySelector('.productpage-swiper');
+    if (swiperEl) {
+      const swiper = new Swiper('.productpage-swiper', {
+        loop: true,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        effect: 'fade',
+        speed: 800,
+      });
+    }
+</script>
 {% endblock %}
