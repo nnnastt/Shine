@@ -18,7 +18,7 @@ class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
     birth_date = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
-    avatar = models.ImageField(upload_to='media/avatar', blank=True, default=None, verbose_name='Фото профиля')
+    avatar = models.ImageField(upload_to='avatar', blank=True, default=None, verbose_name='Фото профиля')
     first_name = models.CharField(max_length=100, blank=True, verbose_name='Имя')
     last_name = models.CharField(max_length=100, blank=True, verbose_name='Фамилия')
     middle_name = models.CharField(max_length=100, blank=True, verbose_name='Отчество')
@@ -121,7 +121,7 @@ class PaymentCard(models.Model):
 
 # Категории + Новинки
 class TypeProduct(models.Model):
-    image = models.ImageField(upload_to='media/type')
+    image = models.ImageField(upload_to='type')
     name = models.CharField(max_length=200, verbose_name="Наименование категории")
     order = models.PositiveIntegerField(default=0, verbose_name="Порядок сортировки")
 
@@ -162,8 +162,9 @@ class ViewProduct(models.Model):
     type_material = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name="Вид материала", default='all')
     category = models.ForeignKey(TypeProduct, related_name='view_products', on_delete=models.CASCADE,
                                  verbose_name='Категория', null=True, blank=True)
-    product = models.ImageField(upload_to='product', verbose_name="Изображение товара")
-    product2 = models.ImageField(upload_to='product2', verbose_name="Изображение товара2", null=True, blank=True)
+    product = models.ImageField(upload_to='productimage', verbose_name="Изображение товара")
+    product2 = models.ImageField(upload_to='productimageswiper', verbose_name="Изображение товара2", null=True,
+                                 blank=True)
     name_product = models.CharField(max_length=200, verbose_name="Название")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
     quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
@@ -213,8 +214,8 @@ class ViewProduct(models.Model):
 
 # Информация о продукте
 class InfoProduct(models.Model):
-    view_product = models.OneToOneField(ViewProduct, related_name='detailed_info', on_delete=models.CASCADE,
-                                        verbose_name='Товар')
+    view_product = models.ForeignKey(ViewProduct, related_name='detailed_info', on_delete=models.CASCADE,
+                                     verbose_name='Товар')
     info = models.TextField(verbose_name="Описание")
 
     class Meta:
@@ -324,7 +325,7 @@ class OrderItem(models.Model):
 
 # Подтверждение заказа
 class OrderConfirmation(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='confirmation')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='confirmation')
     confirmation_number = models.CharField(max_length=50, unique=True)
     confirmed_at = models.DateTimeField(auto_now_add=True)
     email_sent = models.BooleanField(default=False)

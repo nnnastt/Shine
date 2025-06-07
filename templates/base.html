@@ -48,7 +48,7 @@
         <div class="shine-header-icons">
             <a class="shine-icon-btn" href="{% url 'helper' %}"><i class="bi bi-question-circle"></i></a>
             <a class="shine-icon-btn" href=""><i class="bi bi-heart"></i></a>
-            <a class="shine-icon-btn" href=""><i class="bi bi-bag"></i></a>
+            <a class="shine-icon-btn" href="{% url 'profile' %}"><i class="bi bi-bag"></i></a>
             {% if request.user.is_superuser %}
                 <a class="shine-icon-btn" href="#"><i class="bi bi-person-gear"></i></a>
                 <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>

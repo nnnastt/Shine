@@ -1,9 +1,12 @@
+import uuid
 from datetime import timedelta
+from decimal import Decimal
+
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from webapp.forms import RegisterForm, PaymentCardForm, AvatarUpdateForm, AddressForm, ProfileUpdateForm
 from webapp.models import TypeProduct, ViewProduct, InfoProduct, ProductDetail, ProductWarning, UserInfo, UserAddress, \
-    PaymentCard
+    PaymentCard, OrderItem, Order, Cart, WishlistItem, CartItem, Wishlist
 from django.shortcuts import get_object_or_404
 from django.db.models import Case, When, Value, IntegerField
 from django.contrib.auth import logout, login
@@ -243,3 +246,4 @@ def catalog(request):
         category_products.append((category, products))
     context = {'category_products': category_products}
     return render(request, 'catalog.html', context)
+
