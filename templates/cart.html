@@ -1,6 +1,352 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %} Корзина | Shine {% endblock %}
-{% block content %}
 
+{% block content %}
+<div class="cart-container">
+    <div class="cart-header">
+        <div class="productpage-breadcrumbs">
+            <a href="{% url 'main' %}" class="productpage-breadcrumb-link">Главная</a> /
+            <span class="productpage-breadcrumb-link">Корзина</span>
+        </div>
+        <h1 class="productpage-title">Корзина</h1>
+    </div>
+
+    <div class="cart-content">
+        {% if cart.items.all %}
+        <div class="cart-items-container">
+            <div class="cart-items-header">
+                <div class="header-product">Товар</div>
+                <div class="header-price">Цена</div>
+                <div class="header-quantity">Количество</div>
+                <div class="header-total">Итого</div>
+            </div>
+
+            <div class="cart-items">
+                {% for item in cart.items.all %}
+                <div class="cart-item" data-product-id="{{ item.product.id }}">
+                    <div class="item-product">
+                        <a href="{% url 'product_view' item.product.id %}">
+                            <img src="{{ item.product.product.url }}" alt="{{ item.product.name_product }}" class="item-image">
+                        </a>
+                        <div class="item-details">
+                            <a href="{% url 'product_view' item.product.id %}">
+                                <h3>{{ item.product.name_product }}</h3>
+                            </a>
+                            <button class="remove-item" data-product-id="{{ item.product.id }}">Удалить</button>
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        {% if item.product.discount %}
+                        <span class="old-price">{{ item.product.price }} ₽</span>
+                        <span class="discounted-price">{{ item.product.final_price }} ₽</span>
+                        {% else %}
+                        {{ item.product.price }} ₽
+                        {% endif %}
+                    </div>
+                    <div class="item-quantity">
+                        <button class="quantity-btn minus" data-action="decrease">-</button>
+                        <span class="quantity-value">{{ item.quantity }}</span>
+                        <button class="quantity-btn plus" data-action="increase">+</button>
+                    </div>
+                    <div class="item-total">
+                        {{ item.total_price }} ₽
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <div class="summary-header">
+                <h3>Чек</h3>
+            </div>
+            <div class="summary-items" id="summary-items">
+                {% for item in cart.items.all %}
+                <div class="summary-item" data-product-id="{{ item.product.id }}">
+                    <span>{{ item.product.name_product }} × <span
+                            class="item-quantity-display">{{ item.quantity }}</span></span>
+                    <span class="item-total-display">{{ item.total_price }} ₽</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="summary-total">
+                <span>Итого:</span>
+                <span class="total-price">{{ cart.total_price }} ₽</span>
+            </div>
+            <div class="">
+                <a href="{% url 'checkout' %}" class="continue-shopping" id="checkout-btn"
+                   {% if not cart.items.all %}style="pointer-events: none; opacity: 0.5;"{% endif %}>
+                    Оформить заказ
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <p>Ваша корзина пуста</p>
+            <a href="{% url 'catalog' %}" class="continue-shopping">Продолжить покупки</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения -->
+<div class="modal-overlay" id="confirmation-modal">
+    <div class="modal-content">
+        <h4 id="modal-title"></h4>
+        <p id="modal-message"></p>
+        <div class="modal-actions">
+            <button class="modal-btn cancel-btn" id="modal-cancel">Отмена</button>
+            <button class="modal-btn confirm-btn" id="modal-confirm">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Стили для кнопки удаления */
+    .shine-btn-delete {
+        background: none;
+        border: none;
+        color: #dc3545;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 16px;
+    }
+
+    .shine-btn-delete:hover {
+        color: #c82333;
+        background: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Стили для формы срока действия карты */
+    #id_card_expiry {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    .form-error {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+</style>
+<script>
+    // Функция показа кастомного уведомления
+    function showNotification(message, type = 'success', icon = null) {
+        const container = document.querySelector('.notification-container');
+        if (!container) {
+            // Создаем контейнер для уведомлений, если его нет
+            const newContainer = document.createElement('div');
+            newContainer.className = 'notification-container';
+            document.body.appendChild(newContainer);
+            container = newContainer;
+        }
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        notification.innerHTML = `
+            ${icon ? `<i class="${icon}"></i>` : ''}
+            <span class="notification-message">${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Глобальные переменные для модального окна
+    let currentProductId = null;
+
+    // Функция показа модального окна
+    function showConfirmation(title, message, productId = null) {
+        currentProductId = productId;
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-message').textContent = message;
+        document.getElementById('confirmation-modal').style.display = 'flex';
+    }
+
+    // Закрытие модального окна
+    function closeModal() {
+        document.getElementById('confirmation-modal').style.display = 'none';
+        currentProductId = null;
+    }
+
+    // Инициализация модального окна
+    document.getElementById('modal-cancel').addEventListener('click', closeModal);
+    document.getElementById('modal-confirm').addEventListener('click', function() {
+        if (currentProductId) {
+            removeFromCart(currentProductId);
+        }
+        closeModal();
+    });
+
+    // Обновление счетчика в шапке
+    function updateCartCounter(count) {
+        document.querySelectorAll('.cart-counter').forEach(el => {
+            el.textContent = count;
+        });
+    }
+
+    // Обновление количества товара
+    function updateCartItem(productId, quantity) {
+        fetch(`/cart/update/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `quantity=${quantity}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Обновляем UI
+                const itemElement = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+                if (itemElement) {
+                    itemElement.querySelector('.quantity-value').textContent = quantity;
+                    itemElement.querySelector('.item-total').textContent = `${data.item_total} ₽`;
+                }
+
+                // Обновляем чек
+                const summaryItem = document.querySelector(`.summary-item[data-product-id="${productId}"]`);
+                if (summaryItem) {
+                    summaryItem.querySelector('.item-quantity-display').textContent = quantity;
+                    summaryItem.querySelector('.item-total-display').textContent = `${data.item_total} ₽`;
+                }
+
+                updateCartCounter(data.cart_total);
+                document.querySelector('.total-price').textContent = `${data.cart_total_price} ₽`;
+
+                // Показываем уведомление об успешном обновлении
+                showNotification('Количество товара обновлено', 'success', 'bi bi-check-circle');
+
+                // Если удален товар
+                if (quantity <= 0) {
+                    itemElement?.remove();
+                    summaryItem?.remove();
+                    if (document.querySelectorAll('.cart-item').length === 0) {
+                        document.querySelector('.cart-content').innerHTML = `
+                            <div class="empty-cart">
+                                <p>Ваша корзина пуста</p>
+                                <a href="{% url 'catalog' %}" class="continue-shopping">Продолжить покупки</a>
+                            </div>
+                        `;
+                    }
+                }
+            } else {
+                // Показываем уведомление об ошибке
+                const errorMsg = data.message.replace(/^\[|\]$/g, '');
+                showNotification(errorMsg, 'error', 'bi bi-exclamation-triangle');
+            }
+        })
+        .catch(() => {
+            showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+        });
+    }
+
+    // Удаление товара
+    function removeFromCart(productId) {
+        fetch(`/cart/remove/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector(`.cart-item[data-product-id="${productId}"]`)?.remove();
+                document.querySelector(`.summary-item[data-product-id="${productId}"]`)?.remove();
+                updateCartCounter(data.cart_total);
+                document.querySelector('.total-price').textContent = `${data.cart_total_price} ₽`;
+
+                // Показываем уведомление об успешном удалении
+                showNotification('Товар удален из корзины', 'success', 'bi bi-trash');
+
+                if (document.querySelectorAll('.cart-item').length === 0) {
+                    document.querySelector('.cart-content').innerHTML = `
+                        <div class="empty-cart">
+                            <p>Ваша корзина пуста</p>
+                            <a href="{% url 'catalog' %}" class="continue-shopping">Продолжить покупки</a>
+                        </div>
+                    `;
+                }
+            } else {
+                // Показываем уведомление об ошибке
+                const errorMsg = data.error || 'Не удалось удалить товар';
+                showNotification(errorMsg, 'error', 'bi bi-exclamation-triangle');
+            }
+        })
+        .catch(() => {
+            showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+        });
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+        // Проверка авторизации при заходе в корзину
+        {% if not request.user.is_authenticated %}
+        showConfirmation(
+            'Требуется авторизация',
+            'Для просмотра корзины необходимо войти в систему. Хотите перейти на страницу входа?',
+            null
+        );
+        document.getElementById('modal-confirm').addEventListener('click', function() {
+            window.location.href = "{% url 'login' %}?next={% url 'view_cart' %}";
+        });
+        {% endif %}
+
+        // Обработчики кнопок +/-
+        document.querySelectorAll('.quantity-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemElement = this.closest('.cart-item');
+                const productId = itemElement.dataset.productId;
+                const quantityEl = itemElement.querySelector('.quantity-value');
+                let quantity = parseInt(quantityEl.textContent);
+
+                if (this.dataset.action === 'increase') {
+                    quantity += 1;
+                } else if (this.dataset.action === 'decrease') {
+                    quantity = Math.max(1, quantity - 1);
+                }
+
+                updateCartItem(productId, quantity);
+            });
+        });
+
+        // Удаление товара
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showConfirmation(
+                    'Удаление товара',
+                    'Вы уверены, что хотите удалить этот товар из корзины?',
+                    this.dataset.productId
+                );
+            });
+        });
+
+
+    });
+</script>
 {% endblock %}

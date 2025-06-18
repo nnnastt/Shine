@@ -28,12 +28,11 @@
 
             <div class="shine-profile-info">
                 <h2>{{ user_info.full_name }}</h2>
-                <p><i class="bi bi-envelope"></i> {{ user.email }}</p>
                 {% if user_info.phone %}
-                    <p><i class="bi bi-telephone"></i> {{ user_info.phone }}</p>
+                <p><i class="bi bi-telephone"></i> {{ user_info.phone }}</p>
                 {% endif %}
                 {% if user_info.birth_date %}
-                    <p><i class="bi bi-calendar"></i> {{ user_info.birth_date|date:"d.m.Y" }}</p>
+                <p><i class="bi bi-calendar"></i> {{ user_info.birth_date|date:"d.m.Y" }}</p>
                 {% endif %}
             </div>
         </div>
@@ -53,31 +52,36 @@
         <!-- Личные данные -->
         <section id="shine-personal-info" class="shine-profile-section shine-section-active">
             <h2>Личные данные</h2>
-            <form method="post" class="shine-profile-form">
+            <form method="post" class="shine-profile-form" id="personal-info-form">
                 {% csrf_token %}
                 <input type="hidden" name="update_profile" value="1">
                 <div class="shine-form-row">
                     <div class="shine-form-group">
                         <label>Имя</label>
                         {{ profile_form.first_name }}
+                        <small class="form-error" id="first_name-error"></small>
                     </div>
                     <div class="shine-form-group">
                         <label>Фамилия</label>
                         {{ profile_form.last_name }}
+                        <small class="form-error" id="last_name-error"></small>
                     </div>
                 </div>
                 <div class="shine-form-group">
                     <label>Отчество</label>
                     {{ profile_form.middle_name }}
+                    <small class="form-error" id="middle_name-error"></small>
                 </div>
                 <div class="shine-form-row">
                     <div class="shine-form-group">
                         <label>Телефон</label>
                         {{ profile_form.phone }}
+                        <small class="form-error" id="phone-error"></small>
                     </div>
                     <div class="shine-form-group">
                         <label>Дата рождения</label>
                         {{ profile_form.birth_date }}
+                        <small class="form-error" id="birth_date-error"></small>
                     </div>
                 </div>
                 <button type="submit" class="shine-btn-save">Сохранить изменения</button>
@@ -97,13 +101,19 @@
                     </div>
                     <div class="shine-address-actions">
                         {% if not address.is_default %}
-                        <form method="post" action="{% url 'set_default_address' address.id %}">
+                        <form method="post" action="{% url 'set_default_address' address.id %}" class="address-action-form">
                             {% csrf_token %}
                             <button type="submit" class="shine-btn-set-default">Сделать основным</button>
                         </form>
                         {% else %}
                         <span class="shine-default-badge">Основной</span>
                         {% endif %}
+                        <form method="post" action="{% url 'delete_address' address.id %}" class="address-delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="shine-btn-delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 {% empty %}
@@ -115,12 +125,13 @@
 
             <div class="shine-address-form-container" id="shine-address-form-container">
                 <h3>Добавить адрес</h3>
-                <form method="post" class="shine-address-form">
+                <form method="post" class="shine-address-form" id="address-form">
                     {% csrf_token %}
                     <input type="hidden" name="add_address" value="1">
                     <div class="shine-form-group">
                         <label>Улица, дом, квартира</label>
                         {{ address_form.address_line1 }}
+                        <small class="form-error" id="address_line1-error"></small>
                     </div>
                     <div class="shine-form-group">
                         <label>Дополнительная информация (необязательно)</label>
@@ -130,10 +141,12 @@
                         <div class="shine-form-group">
                             <label>Город</label>
                             {{ address_form.city }}
+                            <small class="form-error" id="city-error"></small>
                         </div>
                         <div class="shine-form-group">
                             <label>Почтовый индекс</label>
                             {{ address_form.postal_code }}
+                            <small class="form-error" id="postal_code-error"></small>
                         </div>
                     </div>
                     <div class="shine-form-group">
@@ -176,13 +189,19 @@
                     </div>
                     <div class="shine-card-actions">
                         {% if not card.is_default %}
-                        <form method="post" action="{% url 'set_default_card' card.id %}">
+                        <form method="post" action="{% url 'set_default_card' card.id %}" class="card-action-form">
                             {% csrf_token %}
                             <button type="submit" class="shine-btn-set-default">Сделать основной</button>
                         </form>
                         {% else %}
                         <span class="shine-default-badge">Основная</span>
                         {% endif %}
+                        <form method="post" action="{% url 'delete_card' card.id %}" class="card-delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="shine-btn-delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 {% empty %}
@@ -194,7 +213,7 @@
 
             <div class="shine-card-form-container" id="shine-card-form-container">
                 <h3>Добавить платежную карту</h3>
-                <form method="post" class="shine-card-form">
+                <form method="post" class="shine-card-form" id="card-form">
                     {% csrf_token %}
                     <input type="hidden" name="add_card" value="1">
                     <div class="shine-form-group">
@@ -204,23 +223,28 @@
                     <div class="shine-form-group">
                         <label>Имя владельца</label>
                         {{ card_form.card_holder }}
+                        <small class="form-error" id="card_holder-error"></small>
                     </div>
                     <div class="shine-form-group">
                         <label>Номер карты</label>
                         {{ card_form.card_number }}
+                        <small class="form-error" id="card_number-error"></small>
                     </div>
                     <div class="shine-form-row">
                         <div class="shine-form-group">
                             <label>Месяц окончания</label>
                             {{ card_form.expiry_month }}
+                            <small class="form-error" id="expiry_month-error"></small>
                         </div>
                         <div class="shine-form-group">
                             <label>Год окончания</label>
                             {{ card_form.expiry_year }}
+                            <small class="form-error" id="expiry_year-error"></small>
                         </div>
                         <div class="shine-form-group">
                             <label>CVV</label>
                             {{ card_form.cvv }}
+                            <small class="form-error" id="cvv-error"></small>
                         </div>
                     </div>
                     <div class="shine-form-check">
@@ -249,7 +273,7 @@
                     <div class="shine-order-body">
                         <div class="shine-order-summary">
                             <span class="shine-order-status">{{ order.get_status_display }}</span>
-                            <span class="shine-order-total">{{ order.total_price }} ₽</span>
+                            <span class="shine-order-total">{{ order.total }} ₽</span>
                         </div>
                         <div class="shine-order-actions">
                             <a href="{% url 'order_detail' order.id %}" class="shine-btn-view">Подробнее</a>
@@ -268,6 +292,49 @@
         </section>
     </div>
 </div>
+
+<style>
+    /* Стили для кнопки удаления */
+    .shine-btn-delete {
+        background: none;
+        border: none;
+        color: #dc3545;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 16px;
+    }
+
+    .shine-btn-delete:hover {
+        color: #c82333;
+        background: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Стили для формы срока действия карты */
+    #id_card_expiry {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    .form-error {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -354,6 +421,303 @@
                 }
             });
         }
+
+        // Валидация формы личных данных
+        const personalInfoForm = document.getElementById('personal-info-form');
+        if (personalInfoForm) {
+            personalInfoForm.addEventListener('submit', function(e) {
+                let isValid = true;
+                clearErrors();
+
+                // Валидация имени
+                const firstName = document.getElementById('id_first_name').value.trim();
+                if (!firstName || !/^[А-Яа-яЁё\-]+$/.test(firstName)) {
+                    showError('first_name-error', 'Введите корректное имя (только русские буквы и дефис)');
+                    isValid = false;
+                }
+
+                // Валидация фамилии
+                const lastName = document.getElementById('id_last_name').value.trim();
+                if (!lastName || !/^[А-Яа-яЁё\-]+$/.test(lastName)) {
+                    showError('last_name-error', 'Введите корректную фамилию (только русские буквы и дефис)');
+                    isValid = false;
+                }
+
+                // Валидация отчества (необязательное поле)
+                const middleName = document.getElementById('id_middle_name').value.trim();
+                if (middleName && !/^[А-Яа-яЁё\-]*$/.test(middleName)) {
+                    showError('middle_name-error', 'Отчество может содержать только русские буквы и дефис');
+                    isValid = false;
+                }
+
+                // Валидация телефона
+                const phone = document.getElementById('id_phone').value.trim();
+                if (!phone || !/^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(phone)) {
+                    showError('phone-error', 'Введите телефон в формате +7(XXX)-XXX-XX-XX');
+                    isValid = false;
+                }
+
+                // Валидация даты рождения
+                const birthDate = document.getElementById('id_birth_date').value;
+                if (!birthDate) {
+                    showError('birth_date-error', 'Введите дату рождения');
+                    isValid = false;
+                } else {
+                    const today = new Date();
+                    const birthDateObj = new Date(birthDate);
+                    const minAgeDate = new Date();
+                    minAgeDate.setFullYear(today.getFullYear() - 14);
+
+                    if (birthDateObj > today) {
+                        showError('birth_date-error', 'Дата рождения не может быть в будущем');
+                        isValid = false;
+                    } else if (birthDateObj > minAgeDate) {
+                        showError('birth_date-error', 'Вы должны быть старше 14 лет');
+                        isValid = false;
+                    }
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Валидация формы адреса
+        const addressForm = document.getElementById('address-form');
+        if (addressForm) {
+            addressForm.addEventListener('submit', function(e) {
+                let isValid = true;
+                clearErrors();
+
+                // Валидация адреса (улица, дом, квартира)
+                const addressLine1 = document.getElementById('id_address_line1').value.trim();
+                if (!addressLine1 || addressLine1.length < 5) {
+                    showError('address_line1-error', 'Адрес должен содержать минимум 5 символов');
+                    isValid = false;
+                } else if (!/^[А-Яа-яЁё0-9\s\-\,\.\/]+$/.test(addressLine1)) {
+                    showError('address_line1-error', 'Адрес может содержать только русские буквы, цифры и символы ,.-/');
+                    isValid = false;
+                }
+
+                // Валидация дополнительной информации (необязательное поле)
+                const addressLine2 = document.getElementById('id_address_line2').value.trim();
+                if (addressLine2 && !/^[А-Яа-яЁё0-9\s\-\,\.\/]+$/.test(addressLine2)) {
+                    showError('address_line2-error', 'Дополнительная информация может содержать только русские буквы, цифры и символы ,.-/');
+                    isValid = false;
+                }
+
+                // Валидация города
+                const city = document.getElementById('id_city').value.trim();
+                if (!city || city.length < 2) {
+                    showError('city-error', 'Введите корректное название города (минимум 2 символа)');
+                    isValid = false;
+                } else if (!/^[А-Яа-яЁё\s\-]+$/.test(city)) {
+                    showError('city-error', 'Название города может содержать только русские буквы, пробелы и дефис');
+                    isValid = false;
+                }
+
+                // Валидация почтового индекса
+                const postalCode = document.getElementById('id_postal_code').value.trim();
+                if (!postalCode || !/^\d{6}$/.test(postalCode)) {
+                    showError('postal_code-error', 'Почтовый индекс должен состоять из 6 цифр');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+
+            // Автоматическое форматирование ввода для почтового индекса
+            const postalCodeInput = document.getElementById('id_postal_code');
+            if (postalCodeInput) {
+                postalCodeInput.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/\D/g, '').substring(0, 6);
+                });
+            }
+
+            // Автоматическое форматирование ввода для города (первая буква заглавная)
+            const cityInput = document.getElementById('id_city');
+            if (cityInput) {
+                cityInput.addEventListener('input', function(e) {
+                    if (this.value.length === 1) {
+                        this.value = this.value.toUpperCase();
+                    }
+                });
+            }
+        }
+
+        // Валидация формы карты
+        const cardForm = document.getElementById('card-form');
+        if (cardForm) {
+            cardForm.addEventListener('submit', function(e) {
+                let isValid = true;
+                clearErrors();
+
+                // Валидация имени владельца карты
+                const cardHolder = document.getElementById('id_card_holder');
+                cardHolder.value = cardHolder.value.trim().toUpperCase();
+                if (!cardHolder.value || !/^[A-Z\s\-]+$/.test(cardHolder.value)) {
+                    showError('card_holder-error', 'Введите корректное имя владельца (только латинские буквы)');
+                    isValid = false;
+                }
+
+                // Валидация номера карты
+                const cardNumber = document.getElementById('id_card_number').value.trim().replace(/\s/g, '');
+                if (!cardNumber || !/^\d{16}$/.test(cardNumber)) {
+                    showError('card_number-error', 'Номер карты должен состоять из 16 цифр');
+                    isValid = false;
+                }
+
+                // Валидация срока действия
+                const cardExpiry = document.getElementById('id_card_expiry').value.trim();
+                if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                    showError('card_expiry-error', 'Введите срок действия в формате MM/YY');
+                    isValid = false;
+                } else {
+                    const [month, year] = cardExpiry.split('/');
+                    const expiryMonth = parseInt(month);
+                    const expiryYear = 2000 + parseInt(year);
+                    const currentYear = new Date().getFullYear();
+                    const currentMonth = new Date().getMonth() + 1;
+
+                    if (expiryMonth < 1 || expiryMonth > 12) {
+                        showError('card_expiry-error', 'Месяц должен быть от 01 до 12');
+                        isValid = false;
+                    } else if (expiryYear < currentYear || expiryYear > currentYear + 20) {
+                        showError('card_expiry-error', 'Год должен быть в пределах 20 лет от текущего');
+                        isValid = false;
+                    } else if (expiryYear === currentYear && expiryMonth < currentMonth) {
+                        showError('card_expiry-error', 'Срок действия карты истек');
+                        isValid = false;
+                    }
+                }
+
+                // Валидация CVV
+                const cvv = document.getElementById('id_cvv').value.trim();
+                if (!cvv || !/^\d{3,4}$/.test(cvv)) {
+                    showError('cvv-error', 'CVV должен состоять из 3 или 4 цифр');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Вспомогательные функции для валидации
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.form-error');
+            errorElements.forEach(element => {
+                element.textContent = '';
+                element.style.display = 'none';
+            });
+        }
+
+        // Маски для полей ввода
+        // Маска для телефона
+        const phoneInput = document.getElementById('id_phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let value = this.value.replace(/\D/g, '');
+                if (value.startsWith('7') && value.length > 1) {
+                    value = '+7' + value.substring(1);
+                } else if (value.startsWith('8')) {
+                    value = '+7' + value.substring(1);
+                } else if (!value.startsWith('+7') && value.length > 0) {
+                    value = '+7' + value;
+                }
+
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '(' + value.substring(2);
+                }
+                if (value.length > 6) {
+                    value = value.substring(0, 6) + ')-' + value.substring(6);
+                }
+                if (value.length > 11) {
+                    value = value.substring(0, 11) + '-' + value.substring(11);
+                }
+                if (value.length > 14) {
+                    value = value.substring(0, 14) + '-' + value.substring(14);
+                }
+                this.value = value.substring(0, 17);
+            });
+        }
+
+        // Маска для номера карты
+        const cardNumberInput = document.getElementById('id_card_number');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                // Обрезаем до 19 символов (16 цифр + 3 пробела)
+                this.value = value.substring(0, 19);
+            });
+        }
+
+        // Маска для срока действия карты (MM/YY)
+        const expiryMonthInput = document.getElementById('id_expiry_month');
+        if (expiryMonthInput) {
+            expiryMonthInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').substring(0, 2);
+            });
+        }
+
+        // Маска для года (4 цифры)
+        const expiryYearInput = document.getElementById('id_expiry_year');
+        if (expiryYearInput) {
+            expiryYearInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '').substring(0, 4);
+            });
+        }
+
+        // Маска для CVV
+        const cvvInput = document.getElementById('id_cvv');
+        if (cvvInput) {
+            cvvInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/\D/g, '').substring(0, 4);
+            });
+        }
+
+        // Маска для почтового индекса
+        const postalCodeInput = document.getElementById('id_postal_code');
+        if (postalCodeInput) {
+            postalCodeInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/\D/g, '').substring(0, 6);
+            });
+        }
+
+        // Автоматическое преобразование имени владельца карты в верхний регистр
+        const cardHolderInput = document.getElementById('id_card_holder');
+        if (cardHolderInput) {
+            cardHolderInput.addEventListener('input', function(e) {
+                this.value = this.value.toUpperCase();
+                // Удаляем все символы, кроме латинских букв, пробелов и дефисов
+                this.value = this.value.replace(/[^A-Z\s\-]/g, '');
+            });
+        }
+
+        // Подтверждение удаления адреса/карты
+        const deleteButtons = document.querySelectorAll('.shine-btn-delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const form = this.closest('form');
+                const itemType = form.classList.contains('address-delete-form') ? 'адрес' : 'карту';
+                if (!confirm(`Вы уверены, что хотите удалить этот ${itemType}?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
     });
 </script>
 {% endblock %}

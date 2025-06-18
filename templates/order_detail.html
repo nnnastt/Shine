@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Заказ #{{ order.id }} | Shine {% endblock %}
+
+{% block content %}
+<div class="odp-main-wrapper">
+    <h1 class="odp-order-title">Заказ #{{ order.id }}</h1>
+
+    <div class="odp-status-container">
+        <span class="odp-status-label">Статус:</span>
+        <span class="odp-status-value">{{ order.get_status_display }}</span>
+        <span class="odp-order-date">от {{ order.order_date|date:"d.m.Y H:i" }}</span>
+    </div>
+
+    <div class="odp-layout-grid">
+        <div class="odp-products-section">
+            <h2 class="odp-section-heading">Товары</h2>
+
+            <div class="odp-items-container">
+                {% for item in order.items.all %}
+                <div class="odp-line-item">
+                    <div class="odp-product-name">{{ item.product.name_product }} × {{ item.quantity }}</div>
+                    <div class="odp-product-price">{{ item.total_price }} ₽</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="odp-totals-section">
+                <div class="odp-total-line">
+                    <span>Стоимость товаров:</span>
+                    <span>{{ order.subtotal }} ₽</span>
+                </div>
+                <div class="odp-total-line">
+                    <span>Доставка:</span>
+                    <span>{{ order.shipping_cost }} ₽</span>
+                </div>
+                {% if order.discount %}
+                <div class="odp-total-line odp-discount-line">
+                    <span>Скидка (День рождения):</span>
+                    <span>-{{ order.discount }} ₽</span>
+                </div>
+                {% endif %}
+                <div class="odp-total-line odp-grand-total">
+                    <span>Итого:</span>
+                    <span>{{ order.total }} ₽</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="odp-info-section">
+            <h2 class="odp-section-heading">Информация о заказе</h2>
+
+            <div class="odp-info-block">
+                <h3 class="odp-info-title">Доставка</h3>
+                <p class="odp-info-text">{{ order.shipping_address.address_line1 }}</p>
+                <p class="odp-info-text">{{ order.shipping_address.city }}, {{ order.shipping_address.postal_code }}</p>
+                <p class="odp-info-text">Дата доставки: {{ order.delivery_date|date:"d.m.Y" }} {{ order.delivery_time }}</p>
+            </div>
+
+            <div class="odp-info-block">
+                <h3 class="odp-info-title">Оплата</h3>
+                <p class="odp-info-text">Карта: **** **** **** {{ order.payment_card.card_number }}</p>
+                <p class="odp-info-text">Срок действия: {{ order.payment_card.expiry_month }}/{{ order.payment_card.expiry_year }}</p>
+                <p class="odp-info-text">Имя на карте: {{ order.payment_card.card_holder }}</p>
+            </div>
+
+            <div class="odp-info-block">
+                <h3 class="odp-info-title">Контактная информация</h3>
+                <p class="odp-info-text">Телефон: {{ order.phone }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

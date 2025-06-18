@@ -39,7 +39,7 @@
             <a class="shine-nav-link" href="{% url 'gift' %}">Подарки</a>
         </nav>
         <!-- Логотип -->
-        <div class="shine-logo d-none d-xl-block">
+        <div class="shine-logo d-xl-block">
             <a class="shine-logo-link" href="{% url 'main'%}">
                 <h1 class="shine-logo-text">Shine</h1>
             </a>
@@ -48,7 +48,14 @@
         <div class="shine-header-icons">
             <a class="shine-icon-btn" href="{% url 'helper' %}"><i class="bi bi-question-circle"></i></a>
             <a class="shine-icon-btn" href=""><i class="bi bi-heart"></i></a>
-            <a class="shine-icon-btn" href="{% url 'profile' %}"><i class="bi bi-bag"></i></a>
+            <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_cart' %}{% else %}{% url 'login' %}?next={% url 'view_cart' %}{% endif %}">
+                <i class="bi bi-bag"></i>
+                {% if request.user.is_authenticated and cart_items_count > 0 %}
+                <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
+                    {{ cart_items_count }}
+                </span>
+                {% endif %}
+            </a>
             {% if request.user.is_superuser %}
                 <a class="shine-icon-btn" href="#"><i class="bi bi-person-gear"></i></a>
                 <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>
@@ -96,13 +103,13 @@
                     <i class="shine-social-icon bi bi-youtube"></i>
                 </div>
             </div>
-            <div class="shine-footer-col col-xl-2 d-none d-xl-block">
+            <div class="shine-footer-col col-xl-2  d-xl-block">
                 <h6 class="shine-footer-title">Ссылки</h6>
                 <a href="{% url 'catalog' %}" class="shine-footer-link d-block">Каталог</a>
                 <a href="{% url 'news' %}" class="shine-footer-link d-block">Новинки</a>
                 <a href="{% url 'gift' %}" class="shine-footer-link d-block">Подарки</a>
             </div>
-            <div class="shine-footer-col col-xl-2 d-none d-xl-block">
+            <div class="shine-footer-col col-xl-2 d-xl-block">
                  <h6 class="shine-footer-title">Информация</h6>
                 <a href="{% url 'about' %}" class="shine-footer-link d-block">О нас</a>
                 <a href="{% url 'FAQ' %}" class="shine-footer-link d-block">Вопрос-Ответ</a>
@@ -133,6 +140,31 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Нижняя панель для мобильных -->
+<div class="shine-mobile-bottom-bar d-lg-none">
+    <div class="shine-mobile-icons">
+        <a class="shine-icon-btn" href="{% url 'helper' %}"><i class="bi bi-question-circle"></i></a>
+        <a class="shine-icon-btn" href=""><i class="bi bi-heart"></i></a>
+        <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_cart' %}{% else %}{% url 'login' %}?next={% url 'view_cart' %}{% endif %}">
+            <i class="bi bi-bag"></i>
+            {% if request.user.is_authenticated and cart_items_count > 0 %}
+            <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 8px;">
+                {{ cart_items_count }}
+            </span>
+            {% endif %}
+        </a>
+        {% if request.user.is_superuser %}
+            <a class="shine-icon-btn" href="#"><i class="bi bi-person-gear"></i></a>
+            <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>
+        {% elif request.user.is_authenticated %}
+            <a class="shine-icon-btn" href="{% url 'profile' %}"><i class="bi bi-person-check"></i></a>
+            <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>
+        {% else %}
+            <a class="shine-icon-btn" href="{% url 'login' %}"><i class="bi bi-person-add"></i></a>
+        {% endif %}
+    </div>
+</div>
 
+<div class="notification-container"></div>
 </body>
 </html>

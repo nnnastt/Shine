@@ -65,8 +65,15 @@ class UserAddress(models.Model):
             UserAddress.objects.filter(user=self.user).exclude(pk=self.pk).update(is_default=False)
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        if self.is_default and self.user.addresses.count() > 1:
+            # Назначаем другой адрес основным перед удалением
+            new_default = self.user.addresses.exclude(pk=self.pk).first()
+            new_default.is_default = True
+            new_default.save()
+        super().delete(*args, **kwargs)
 
-# Платежные карты (значительно улучшено)
+# Платежные карты
 class PaymentCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards')
     card_holder = models.CharField(max_length=100, verbose_name='Владелец карты')
@@ -106,18 +113,39 @@ class PaymentCard(models.Model):
         return f"{self.expiry_month:02d}/{self.expiry_year}"
 
     def clean(self):
+        if self.expiry_month is None or self.expiry_year is None:
+            raise ValidationError('Необходимо указать месяц и год окончания действия карты')
+
         current_year = timezone.now().year
         current_month = timezone.now().month
+
         if self.expiry_year < current_year or (self.expiry_year == current_year and self.expiry_month < current_month):
             raise ValidationError('Срок действия карты истек')
-        if self.is_default and PaymentCard.objects.filter(user=self.user, is_default=True).exclude(pk=self.pk).exists():
-            raise ValidationError('У пользователя может быть только одна карта по умолчанию')
+
+        if self.is_default:
+            existing_default = PaymentCard.objects.filter(
+                user=self.user,
+                is_default=True
+            ).exclude(pk=self.pk).first()
+
+            if existing_default:
+                raise ValidationError('У пользователя может быть только одна карта по умолчанию')
 
     def save(self, *args, **kwargs):
-        if self.is_default:
-            PaymentCard.objects.filter(user=self.user).exclude(pk=self.pk).update(is_default=False)
+        if self.card_number:
+            self.card_number = self.card_number.replace(' ', '')
+
+        if not self.pk and not PaymentCard.objects.filter(user=self.user).exists():
+            self.is_default = True
+
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        if self.is_default and self.user.cards.count() > 1:
+            new_default = self.user.cards.exclude(pk=self.pk).first()
+            new_default.is_default = True
+            new_default.save()
+        super().delete(*args, **kwargs)
 
 # Категории + Новинки
 class TypeProduct(models.Model):
@@ -136,7 +164,7 @@ class TypeProduct(models.Model):
     def get_absolute_url(self):
         return reverse('product_list_by_category', args=[self.pk])
 
-
+# Сортировка
 class ProductQuerySet(models.QuerySet):
     def active(self):
         return self.filter(is_active=True, quantity__gt=0)
@@ -149,7 +177,6 @@ class ProductQuerySet(models.QuerySet):
 
     def sort_by_popularity(self):
         return self.order_by('-views')
-
 
 # Все продукты
 class ViewProduct(models.Model):
@@ -211,11 +238,10 @@ class ViewProduct(models.Model):
             return f"<span class='old-price'>{self.price} ₽</span> <span class='discounted-price'>{self.final_price} ₽</span>"
         return f"{self.price} ₽"
 
-
 # Информация о продукте
 class InfoProduct(models.Model):
-    view_product = models.ForeignKey(ViewProduct, related_name='detailed_info', on_delete=models.CASCADE,
-                                     verbose_name='Товар')
+    view_product = models.OneToOneField(ViewProduct, related_name='detailed_info', on_delete=models.CASCADE,
+                                        verbose_name='Товар')
     info = models.TextField(verbose_name="Описание")
 
     class Meta:
@@ -228,8 +254,7 @@ class InfoProduct(models.Model):
     def get_absolute_url(self):
         return reverse('product_view', kwargs={'pk': self.view_product.pk})
 
-
-# Детали
+# Состав и характеристики
 class ProductDetail(models.Model):
     product = models.ForeignKey(InfoProduct, related_name='details', on_delete=models.CASCADE)
     title = models.CharField(default="Состав и характеристики", max_length=100)
@@ -241,7 +266,6 @@ class ProductDetail(models.Model):
 
     def __str__(self):
         return f"{self.title} для {self.product.view_product.name_product}"
-
 
 # Предупреждения
 class ProductWarning(models.Model):
@@ -256,7 +280,6 @@ class ProductWarning(models.Model):
     def __str__(self):
         return f"{self.title} для {self.product.view_product.name_product}"
 
-
 #Заказы
 class Order(models.Model):
     ORDER_STATUS = (
@@ -268,19 +291,10 @@ class Order(models.Model):
         ('returned', 'Возвращен'),
     )
 
-    PAYMENT_STATUS = (
-        ('pending', 'Ожидает оплаты'),
-        ('paid', 'Оплачен'),
-        ('failed', 'Ошибка оплаты'),
-        ('refunded', 'Возврат средств'),
-    )
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_number = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     order_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата заказа')
     status = models.CharField(max_length=20, choices=ORDER_STATUS, default='pending', verbose_name='Статус заказа')
-    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='pending',
-                                      verbose_name='Статус оплаты')
     shipping_address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True,
                                          related_name='shipping_orders')
     billing_address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True,
@@ -289,7 +303,7 @@ class Order(models.Model):
     delivery_date = models.DateField(null=True, blank=True, verbose_name='Дата доставки')
     delivery_time = models.CharField(max_length=50, blank=True, null=True, verbose_name='Время доставки')
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Сумма товаров')
-    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Стоимость доставки')
+    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=450, verbose_name='Стоимость доставки')
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Скидка')
     total = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Итоговая сумма')
     email = models.EmailField(verbose_name='Email для заказа')
@@ -304,6 +318,11 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ #{self.order_number}'
+
+    @property
+    def total_price(self):
+        return sum(item.total_price for item in self.items.all()) + self.shipping_cost - self.discount
+
 
 
 # Элементы заказа
@@ -322,6 +341,8 @@ class OrderItem(models.Model):
     def __str__(self):
         return f'{self.product.name_product} x{self.quantity}'
 
+    def total_price(self):
+        return self.price * self.quantity
 
 # Подтверждение заказа
 class OrderConfirmation(models.Model):
@@ -339,7 +360,6 @@ class OrderConfirmation(models.Model):
     def __str__(self):
         return f'Подтверждение #{self.confirmation_number}'
 
-
 #Избранное
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist', verbose_name='Пользователь')
@@ -350,7 +370,6 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f'Избранное пользователя {self.user.username}'
-
 
 #Избранное элемент
 class WishlistItem(models.Model):
@@ -366,7 +385,6 @@ class WishlistItem(models.Model):
     def __str__(self):
         return f'{self.product.name_product} в избранном у {self.wishlist.user.username}'
 
-
 #Корзина
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart', verbose_name='Пользователь')
@@ -380,6 +398,85 @@ class Cart(models.Model):
     def __str__(self):
         return f'Корзина пользователя {self.user.username}'
 
+    @property
+    def total_items(self):
+        return self.items.aggregate(total=models.Sum('quantity'))['total'] or 0
+
+    @property
+    def total_price(self):
+        total = 0
+        for item in self.items.all():
+            if item.product.discount:
+                total += item.product.final_price * item.quantity
+            else:
+                total += item.product.price * item.quantity
+        return total
+
+    def add_item(self, product, quantity=1):
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=self,
+            product=product,
+            defaults={'quantity': quantity}
+        )
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
+        return cart_item
+
+    def remove_item(self, product):
+        try:
+            cart_item = CartItem.objects.get(cart=self, product=product)
+            cart_item.delete()
+            return True
+        except CartItem.DoesNotExist:
+            return False
+
+    def update_item_quantity(self, product, quantity):
+        try:
+            cart_item = CartItem.objects.get(cart=self, product=product)
+            if quantity <= 0:
+                cart_item.delete()
+            else:
+                cart_item.quantity = quantity
+                cart_item.save()
+            return True
+        except CartItem.DoesNotExist:
+            return False
+
+    def check_availability(self):
+        """Проверяет доступность всех товаров в корзине"""
+        for item in self.items.all():
+            if item.product.quantity < item.quantity:
+                return False, item
+        return True, None
+
+    def create_order(self, user, address, payment_method=None):
+        """Создает заказ из корзины"""
+        order = Order.objects.create(
+            user=user,
+            email=user.email,
+            phone=user.profile.phone,
+            shipping_address=address,
+            billing_address=address,
+            payment_card=payment_method,
+            subtotal=self.total_price,
+            total=self.total_price,
+        )
+
+        for item in self.items.all():
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price,
+                discounted_price=item.product.final_price if item.product.discount else item.product.price
+            )
+            # Уменьшаем количество товара на складе
+            item.product.quantity -= item.quantity
+            item.product.save()
+
+        self.items.all().delete()  # Очищаем корзину
+        return order
 
 # Элементы корзины
 class CartItem(models.Model):
@@ -397,6 +494,13 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.product.name_product} ({self.quantity}) в корзине {self.cart.user.username}'
 
+    @property
+    def total_price(self):
+        if self.product.discount:
+            return self.product.final_price * self.quantity
+        return self.product.price * self.quantity
 
-
-
+    def save(self, *args, **kwargs):
+        if self.quantity > self.product.quantity:
+            raise ValidationError("Недостаточно товара на складе")
+        super().save(*args, **kwargs)

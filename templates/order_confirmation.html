@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Заказ успешно оформлен | Shine {% endblock %}
+
+{% block content %}
+<div class="ocd-main-wrapper">
+    <h1 class="ocd-order-title">Заказ #{{ order.id }} успешно оформлен</h1>
+
+    <div class="ocd-status-container">
+        <span class="ocd-status-label">Статус:</span>
+        <span class="ocd-status-value">{{ order.get_status_display }}</span>
+        <span class="ocd-order-date">{{ order.order_date|date:"d.m.Y H:i" }}</span>
+    </div>
+
+    <div class="ocd-layout-grid">
+        <div class="ocd-products-section">
+            <h2 class="ocd-section-heading">Товары</h2>
+
+            <div class="ocd-items-container">
+                {% for item in order.items.all %}
+                <div class="ocd-line-item">
+                    <div class="ocd-product-name">{{ item.product.name_product }} × {{ item.quantity }}</div>
+                    <div class="ocd-product-price">{{ item.total_price }} ₽</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="ocd-totals-section">
+                <div class="ocd-total-line">
+                    <span>Стоимость товаров:</span>
+                    <span>{{ order.subtotal }} ₽</span>
+                </div>
+                <div class="ocd-total-line">
+                    <span>Доставка:</span>
+                    <span>{{ order.shipping_cost }} ₽</span>
+                </div>
+                {% if order.discount %}
+                <div class="ocd-total-line ocd-discount-line">
+                    <span>Скидка:</span>
+                    <span>-{{ order.discount }} ₽</span>
+                </div>
+                {% endif %}
+                <div class="ocd-total-line ocd-grand-total">
+                    <span>Итого:</span>
+                    <span>{{ order.total }} ₽</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ocd-info-section">
+            <h2 class="ocd-section-heading">Информация о заказе</h2>
+
+            <div class="ocd-info-block">
+                <h3 class="ocd-info-title">Доставка</h3>
+                <p class="ocd-info-text">{{ order.shipping_address.address_line1 }}</p>
+                <p class="ocd-info-text">{{ order.shipping_address.city }}, {{ order.shipping_address.postal_code }}</p>
+                <p class="ocd-info-text">Дата доставки: {{ order.delivery_date|date:"d.m.Y" }} {{ order.delivery_time }}</p>
+            </div>
+
+            <div class="ocd-info-block">
+                <h3 class="ocd-info-title">Оплата</h3>
+                {% if order.payment_card %}
+                <p class="ocd-info-text">Карта: **** **** **** {{ order.payment_card.card_number }}</p>
+                <p class="ocd-info-text">Срок действия: {{ order.payment_card.expiry_month }}/{{ order.payment_card.expiry_year }}</p>
+                <p class="ocd-info-text">Имя на карте: {{ order.payment_card.card_holder }}</p>
+                {% else %}
+                <p class="ocd-info-text">Наличные при получении</p>
+                {% endif %}
+            </div>
+
+            <div class="ocd-info-block">
+                <h3 class="ocd-info-title">Контактная информация</h3>
+                <p class="ocd-info-text">Телефон: {{ order.phone }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ocd-actions-block">
+        <a href="{% url 'catalog' %}" class="ocd-secondary-btn">Вернуться в магазин</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -10,17 +10,116 @@
     </div>
     <div class="catalog-row">
         {% for product in products %}
-        <a href="{{ product.get_absolute_url }}" class="catalog-card">
-            <img src="{{ product.product.url }}" class="catalog-img" alt="{{ product.name_product }}">
-            <div class="catalog-info">
-                <p class="catalog-name">{{ product.name_product|upper }}</p>
-                <p class="catalog-price">{{ product.price_with_currency|safe }}</p>
-            </div>
-        </a>
+        <div class="catalog-card">
+            <button class="add-to-cart-btn" data-product-id="{{ product.id }}">
+                <i class="bi bi-plus-circle"></i> В корзину
+            </button>
+            <button class="add-to-wishlist-btn" data-product-id="{{ product.id }}">
+                <i class="bi bi-heart"></i>
+            </button>
+
+            <a href="{{ product.get_absolute_url }}" class="catalog-product-link">
+                <img src="{{ product.product.url }}" class="catalog-img" alt="{{ product.name_product }}">
+                <div class="catalog-info">
+                    <p class="catalog-name">{{ product.name_product|upper }}</p>
+                    <p class="catalog-price">{{ product.price_with_currency|safe }}</p>
+                </div>
+            </a>
+        </div>
         {% endfor %}
     </div>
     <hr class="catalog-divider">
 </section>
 {% endfor %}
+<script>
+    function showNotification(message, type = 'success', icon = null) {
+        const container = document.querySelector('.notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        notification.innerHTML = `
+            ${icon ? `<i class="${icon}"></i>` : ''}
+            <span class="notification-message">${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        {% if request.user.is_authenticated %}
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCounter(data.cart_total);
+                    showNotification(data.message, 'success', 'bi bi-cart');
+                } else {
+                    // Очищаем сообщение от квадратных скобок
+                    const errorMsg = data.message.replace(/^\[|\]$/g, '');
+                    showNotification(errorMsg, 'error', 'bi bi-exclamation-triangle');
+                }
+            })
+            .catch(() => {
+                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+            });
+        {% else %}
+            window.location.href = "{% url 'login' %}?next={{ request.path }}";
+        {% endif %}
+    });
+});
+
+    function updateCartCounter(count) {
+        document.querySelectorAll('.cart-counter').forEach(el => {
+            el.textContent = count;
+        });
+    }
+    document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        {% if request.user.is_authenticated %}
+            fetch(`/wishlist/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Товар добавлен в избранное', 'success', 'bi bi-heart');
+                } else {
+                    const errorMessage = data.error
+                        ? data.error.replace(/^\[|\]$/g, '')
+                        : 'Недостаточно товара в наличии';
+                    showNotification(errorMessage, 'error', 'bi bi-exclamation-triangle');
+                }
+            })
+            .catch(() => {
+                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+            });
+        {% else %}
+            window.location.href = "{% url 'login' %}?next={{ request.path }}";
+        {% endif %}
+    });
+});
+</script>
 
 {% endblock %}

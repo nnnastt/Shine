@@ -6,7 +6,6 @@
 {% block content %}
 <div class="productpage-container">
     <div class="productpage-flex-wrapper">
-
         <div class="productpage-img-col">
             {% if product.product2 %}
             <div class="swiper productpage-swiper">
@@ -34,29 +33,25 @@
             </div>
             {% endif %}
 
-            <h1 class="productpage-title">{{ product.name_product }}</h1>
+            <div class="productpage-title-wrapper">
+                <h1 class="productpage-title">{{ product.name_product }}</h1>
+                <button class="productpage-fav-btn" data-product-id="{{ product.id }}">
+                    <i class="bi bi-heart"></i>
+                </button>
+            </div>
 
             <p class="productpage-price">
                 {{ product.price_with_currency|safe }}
             </p>
 
-
-
             <div class="productpage-description">
                 {{ product.detailed_info.info }}
+            </div>
 
-
-            {% if request.user.is_authenticated %}
-            <form action="" method="post" class="productpage-buy-btn-fav-btn">
-                {% csrf_token %}
-                <button class="productpage-buy-btn">Купить</button>
-                <button type="submit"
-                        class="productpage-fav-btn {% if product in wishlist_products %}active{% endif %}">
-                    {% if product in wishlist_products %}♥{% else %}♡{% endif %}
-                </button>
-            </form>
+            {% if product.is_active and product.quantity > 0 %}
+                <button class="productpage-buy-btn" data-product-id="{{ product.id }}">Купить</button>
             {% else %}
-            <p class="productpage-login-note">Войдите, чтобы купить или добавить в избранное</p>
+                <button class="productpage-buy-btn" disabled>Нет в наличии</button>
             {% endif %}
 
             <details class="productpage-details">
@@ -93,6 +88,7 @@
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+    // Инициализация слайдера
     const swiperEl = document.querySelector('.productpage-swiper');
     if (swiperEl) {
       const swiper = new Swiper('.productpage-swiper', {
@@ -104,6 +100,106 @@
         effect: 'fade',
         speed: 800,
       });
+    }
+
+    // Функция для очистки сообщения от лишних символов
+    function cleanErrorMessage(msg) {
+        if (!msg) return 'Произошла ошибка';
+        return msg.toString()
+            .replace(/^\[|\]$/g, '')  // Удаляем квадратные скобки
+            .replace(/^"|"$/g, '')    // Удаляем кавычки
+            .replace(/^'|'$/g, '')    // Удаляем апострофы
+            .trim();                  // Удаляем пробелы по краям
+    }
+
+    // Функция показа уведомления
+    function showNotification(message, type = 'success', icon = null) {
+        const container = document.querySelector('.notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        notification.innerHTML = `
+            ${icon ? `<i class="${icon}"></i>` : ''}
+            <span class="notification-message">${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Обработчик кнопки "Купить"
+    document.querySelector('.productpage-buy-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        {% if request.user.is_authenticated %}
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCounter(data.cart_total);
+                    showNotification('Товар добавлен в корзину', 'success', 'bi bi-cart');
+                } else {
+                    const cleanMsg = cleanErrorMessage(data.message);
+                    showNotification(cleanMsg, 'error', 'bi bi-exclamation-triangle');
+                }
+            })
+            .catch(() => {
+                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+            });
+        {% else %}
+            window.location.href = "{% url 'login' %}?next={{ request.path }}";
+        {% endif %}
+    });
+
+    // Обработчик кнопки "В избранное"
+    document.querySelector('.productpage-fav-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        const icon = this.querySelector('i');
+        {% if request.user.is_authenticated %}
+            fetch(`/wishlist/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    icon.classList.toggle('bi-heart-fill');
+                    icon.classList.toggle('bi-heart');
+                    const message = data.is_added ? 'Товар добавлен в избранное' : 'Товар удален из избранного';
+                    showNotification(message, 'success', 'bi bi-heart');
+                } else {
+                    const cleanMsg = cleanErrorMessage(data.message);
+                    showNotification(cleanMsg, 'error', 'bi bi-exclamation-triangle');
+                }
+            })
+            .catch(() => {
+                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+            });
+        {% else %}
+            window.location.href = "{% url 'login' %}?next={{ request.path }}";
+        {% endif %}
+    });
+
+    function updateCartCounter(count) {
+        document.querySelectorAll('.cart-counter').forEach(el => {
+            el.textContent = count;
+        });
     }
 </script>
 {% endblock %}

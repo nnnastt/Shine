@@ -11,7 +11,7 @@ body {
 main {
     flex: 1;
 }
-/*-------------------------------------------------------------------------------------------------------- ШАПКА ------------------------------------------------------------------------------------------------------ */
+/*-------------------------------------------------------------------------------------------------- ШАПКА -----------------------------------------------------------------------------------------------------------*/
 .shine-header {
     background: rgb(255 255 255 / 70%);
     position: fixed;
@@ -33,7 +33,7 @@ main {
     width: 100%;
 }
 
-/*------------------------------------------------------------------------------------------------- Бургер-меню ----------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------- Бургер-меню -------------------------------------------------------------------------------------------------*/
 .shine-burger-btn {
     background: none;
     border: none;
@@ -43,33 +43,17 @@ main {
     padding: 0;
     transition: color 0.3s;
     margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
 }
 
 .shine-burger-btn:hover {
     color: #636564;
 }
 
-.shine-mobile-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-}
-
-.shine-mobile-nav-link {
-    color: rgba(0, 0, 0, 0.8);
-    font-family: "Alumni Sans Pinstripe", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-    font-size: 25px;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.shine-mobile-nav-link:hover {
-    color: #636564;
-}
-/*-------------------------------------------------------------------------------------------------- Навигация -----------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------- Навигация ---------------------------------------------------------------------------------------------------*/
 .shine-nav-links {
     display: flex;
     gap: 35px;
@@ -90,11 +74,12 @@ main {
     color:#636564;
 }
 
-/*-------------------------------------------------------------------------------------------------- ЛОГОТИП ШАПКИ --------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------- ЛОГОТИП ----------------------------------------------------------------------------------------------------*/
 .shine-logo {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1000;
 }
 
 .shine-logo-text {
@@ -104,13 +89,14 @@ main {
     font-style: normal;
     font-size: 58px;
     font-weight: 400;
+    line-height: 1;
 }
 
 .shine-logo-link {
     text-decoration: none;
 }
 
-/*----------------------------------------------------------------------------------------------- ИКОНКИ --------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------- ИКОНКИ --------------------------------------------------------------------------------------------------------*/
 .shine-header-icons {
     margin-left: auto;
     gap: 35px;
@@ -137,8 +123,50 @@ main {
     color: #636564;
 }
 
+/*---------------------------------------------------------------------------------------------- МОБИЛЬНОЕ МЕНЮ ------------------------------------------------------------------------------------------------*/
+.shine-mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
 
-/*---------------------------------------------------------------------------------------------- ПОДВАЛ -------------------------------------------------------------------------------------------------------------*/
+.shine-mobile-nav-link {
+    color: rgba(0, 0, 0, 0.8);
+    font-family: "Alumni Sans Pinstripe", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 25px;
+    text-decoration: none;
+    transition: color 0.3s;
+    text-align: center;
+}
+
+.shine-mobile-nav-link:hover {
+    color: #636564;
+}
+
+/*---------------------------------------------------------------------------------------------- НИЖНЯЯ ПАНЕЛЬ ДЛЯ МОБИЛЬНЫХ -----------------------------------------------------------------------------------*/
+.shine-mobile-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(255 255 255 / 90%);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.shine-mobile-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/*---------------------------------------------------------------------------------------------- ПОДВАЛ --------------------------------------------------------------------------------------------------------*/
 .shine-footer {
     background-color: #f2eeeb;
     padding: 48px 0 32px;
@@ -257,12 +285,322 @@ main {
     color: #6c757d;
 }
 
-/*---------------------------------------------------------------------------------------------- АДАПТАЦИЯ ШАПКА И ПОДВАЛ -------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------- АДАПТАЦИЯ -----------------------------------------------------------------------------------------------------*/
+@media (max-width: 1199.98px) {
+    .shine-nav-links {
+        gap: 20px;
+    }
+    .shine-header-icons {
+        gap: 15px;
+    }
+    .shine-logo-text {
+        font-size: 55px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .shine-logo-text {
+        font-size: 42px;
+    }
+    .shine-nav-link {
+        font-size: 22px;
+    }
+    .shine-footer-brand {
+        font-size: 42px;
+    }
+    .shine-footer-links-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .shine-footer-link {
+        display: block;
+        text-align: center;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .shine-header {
+        width: 95%;
+        left: 2.5%;
+        top: 5px;
+    }
+
+    .shine-logo {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+        order: 2;
+        flex: 1;
+        text-align: center;
+    }
+
+    .shine-logo-text {
+        font-size: 45px;
+    }
+
+    .shine-burger-btn {
+        order: 1;
+    }
+
+    .shine-header-icons {
+        display: none;
+    }
+
+    .shine-mobile-bottom-bar {
+        display: block;
+    }
+
+    .shine-footer-col {
+        flex: 0 0 100%;
+    }
+
+    .shine-footer {
+        padding: 40px 0 20px;
+    }
+
+    .shine-footer-brand {
+        font-size: 45px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .shine-logo-text {
+        font-size: 40px;
+    }
+
+    .shine-mobile-nav-link {
+        font-size: 22px;
+    }
+
+    .shine-footer-brand {
+        font-size: 40px;
+    }
+
+    .shine-footer-subtitle {
+        font-size: 22px;
+    }
+
+    .shine-subscribe-form {
+        max-width: 100%;
+    }
+}
+
+/*--------------------------------------------------------------------------- АВТОРИЗАЦИЯ -------------------------------------------------------------------------------------------------------------*/
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 200px 20px;
+  background: #fff;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  font-family: "Bellota", system-ui;
+  position: relative;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.login-icon {
+
+    font-style: normal;
+  font-size: 20px;
+  color: #333;
+}
+
+.login-header h2 {
+  font-family: "Bellota", system-ui;
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+}
 
 
+.login-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
 
+.login-options {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
 
+.login-forgot {
+  font-size: 12px;
+  color: #888;
+  text-decoration: none;
+}
 
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: #2d2d2d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #000;
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.login-remember input {
+  margin-right: 8px;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 13px;
+  color: #555;
+}
+
+.login-footer a {
+  color: #c27a54;
+  text-decoration: none;
+}
+
+.login-error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/*--------------------------------------------------------------------------- РЕГИСТРАЦИЯ -------------------------------------------------------------------------------------------------------------*/
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 130px 20px;
+  background: #fff;
+}
+
+.register-box {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  font-family: "Bellota", system-ui;
+  position: relative;
+}
+
+.register-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.register-icon {
+  font-style: normal;
+  font-size: 21px;
+  color: #333;
+}
+
+.register-header h2 {
+  font-family: "Bellota", system-ui;
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.register-label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.register-box input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+input[type="date"] {
+  padding: 10px 14px;
+  font-family: "Bellota", system-ui;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.4);
+}
+
+.register-button {
+  width: 100%;
+  padding: 12px;
+  background: #2d2d2d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.register-button:hover {
+  background: #000;
+}
+
+.register-error {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 13px;
+  color: #555;
+}
+
+.register-footer a {
+  color: #c27a54;
+  text-decoration: none;
+}
 
 /*------------------------------------------------------------------------------------------------------ БАННЕР ГЛАВНАЯ --------------------------------------------------------------------------------------------------------*/
 .homepage-hero {
@@ -668,12 +1006,165 @@ main {
   background-color: rgba(255, 255, 255, 0.9);
 }
 /*-------------------------------------------------------------------------------------------------- АДАПТАЦИЯ ГЛАВНОЙ ------------------------------------------------------------------------------------------------------------*/
+@media (max-width: 991.98px) {
+    .homepage-hero-heading {
+        font-size: 70px;
+    }
 
+    .homepage-hero-description {
+        font-size: 20px;
+    }
 
+    .jewelry-items-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
+    .category-image-wrapper {
+        width: 300px;
+        height: 350px;
+    }
 
+    .about-content-wrapper {
+        flex-direction: column;
+    }
 
+    .company-text-section {
+        padding: 60px 40px;
+    }
 
+    .about-company-visual {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .main-section {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .promo-block,
+    .delivery-block {
+        flex: 1 1 100%;
+        height: 400px;
+    }
+
+    .promo-content {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .homepage-container {
+        padding: 0 30px;
+    }
+
+    .homepage-hero-heading {
+        font-size: 50px;
+    }
+
+    .homepage-hero-description {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .homepage-hero-cta {
+        padding: 10px 25px;
+    }
+
+    .jewelry-categories-section {
+        padding: 50px 0;
+    }
+
+    .jewelry-items-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .category-image-wrapper {
+        width: 100%;
+        max-width: 350px;
+        height: 400px;
+    }
+
+    .categories-main-title {
+        font-size: 35px;
+    }
+
+    .company-story-section {
+        padding: 50px 0;
+    }
+
+    .company-text-section {
+        padding: 40px 20px;
+    }
+
+    .company-mission-title {
+        font-size: 35px;
+    }
+
+    .company-description-paragraph {
+        font-size: 16px;
+    }
+
+    .main-section {
+        margin: 30px 15px;
+        gap: 15px;
+    }
+
+    .promo-block,
+    .delivery-block {
+        height: 350px;
+        padding: 40px;
+    }
+
+    .promo-content {
+        max-width: 100%;
+        padding: 40px;
+        background-image: linear-gradient(0.832turn,rgba(248,248,248,0.7) 47%,rgba(240,240,240,0.8) 71%);
+    }
+
+    .promo-title,
+    .delivery-title {
+        font-size: 35px;
+    }
+
+    .promo-text,
+    .delivery-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .homepage-hero-heading {
+        font-size: 40px;
+    }
+
+    .homepage-hero-description {
+        font-size: 16px;
+    }
+
+    .categories-main-title {
+        font-size: 30px;
+    }
+
+    .category-image-wrapper {
+        height: 350px;
+    }
+
+    .company-mission-title {
+        font-size: 30px;
+    }
+
+    .promo-title,
+    .delivery-title {
+        font-size: 30px;
+    }
+
+    .promo-block,
+    .delivery-block {
+        padding: 30px;
+    }
+}
 /*------------------------------------------------------------------------------------------------ СТРАНИЦА О НАС --------------------------------------------------------------------------------------------------------*/
 .shine-aboutus-container {
     padding: 90px 20px;
@@ -765,11 +1256,6 @@ main {
     object-fit: cover;
     height: 400px;
 }
-
-/*----------------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ О НАС -----------------------------------------------------------------------------------*/
-
-
-
 
 /*--------------------------------------------------------------------------- СТРАНИЦА ПОМОЩИ -------------------------------------------------------------------------------------------------------------*/
 .breadcrumb {
@@ -874,13 +1360,6 @@ main {
     background-color: rgba(255, 255, 255, 0.99);
 }
 
-
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ ПОМОЩИ -------------------------------------------------------------------------------------*/
-
-
-
-
 /*----------------------------------------------------------------------------------------- СТРАНИЦА ВОПРОС-ОТВЕТ -----------------------------------------------------------------------------------*/
 .shine-faq-container {
     padding: 100px 20px;
@@ -940,9 +1419,6 @@ main {
 .faq-question:hover .faq-icon {
     color: #000;
 }
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ВОПРОСОВ -------------------------------------------------------------------------------------------------------------*/
-
-
 
 /*--------------------------------------------------------------------------- СТРАНИЦА ДОСТАВКА И ОПЛАТА -------------------------------------------------------------------------------------------------------------*/
 .shine-delivery-container {
@@ -1011,7 +1487,6 @@ main {
     object-fit: cover;
 }
 
-/* Оплата */
 .shine-payment-section {
   margin-top: 60px;
 }
@@ -1048,11 +1523,6 @@ main {
 .shine-alert-strong {
   font-weight: bold;
 }
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ ДОСТАВКА И ОПЛАТА ---------------------------------------------------------------------------------------------------*/
-
-
-
 
 /*--------------------------------------------------------------------------- КОНТАКТЫ -------------------------------------------------------------------------------------------------------------*/
 .shine-contact-wrapper {
@@ -1155,13 +1625,9 @@ main {
     color: #666;
 }
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ КОНТАКТОВ -------------------------------------------------------------------------------------------------------------*/
-
-
-
 /*--------------------------------------------------------------------------- СТРАНИЦА КАТЕГОРИЙ -------------------------------------------------------------------------------------------------------------*/
 .shine-category-section{
-margin: auto;
+    margin: auto;
     max-width:1720px;
     padding: 100px 20px;
 }
@@ -1195,11 +1661,13 @@ margin: auto;
 
 .shine-product-item {
     padding: 16px;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .shine-product-item:hover {
-    transform: scale(1.03);
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .shine-product-img {
@@ -1218,8 +1686,11 @@ margin: auto;
 }
 
 .shine-product-link {
+    display: block;
     text-decoration: none;
     color: inherit;
+    position: relative;
+    z-index: 1;
 }
 
 .shine-product-meta {
@@ -1351,9 +1822,247 @@ margin: auto;
     font-weight: bold;
 }
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ КАТЕГОРИЙ -------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------- КАТАЛОГ -------------------------------------------------------------------------------------------------------------*/
+.catalog-section {
+  margin: auto;
+    max-width:1720px;
+    padding: 120px 20px 40px 20px;
+}
 
+.catalog-header {
+   display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
+.catalog-title {
+    font-family: "Great Vibes", cursive;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.catalog-button {
+    display: inline-block;
+    padding: 10px 10px;
+    border: 1px solid #000;
+    color: #000;
+    text-decoration: none;
+    font-family: "Bellota", system-ui;
+    transition: 0.3s;
+}
+
+.catalog-button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  color:white;
+}
+
+.catalog-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.catalog-card {
+    width: 300px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.catalog-card:hover {
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.catalog-product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    z-index: 1;
+}
+
+.catalog-img {
+    pointer-events: none;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.catalog-info {
+  margin-top: 10px;
+}
+
+.catalog-name {
+  font-family: "Bellota", system-ui;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.catalog-price {
+  font-family: "Bellota", system-ui;
+  font-size: 13px;
+  color: #666;
+}
+
+.catalog-divider {
+  margin-top: 30px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/*--------------------------------------------------------------------------- НОВИНКИ -------------------------------------------------------------------------------------------------------------*/
+.new-section {
+    margin: auto;
+    max-width:1720px;
+    padding: 120px 20px 40px 20px;
+}
+
+.new-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.new-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.new-category-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 35px;
+}
+
+.new-button {
+ display: inline-block;
+  padding: 10px 10px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  font-family: "Bellota", system-ui;
+  transition: 0.3s;
+}
+
+.new-button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  color:white;
+}
+
+.new-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.new-card {
+  width: 300px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+}
+
+.new-card:hover {
+  transform: scale(1.03);
+}
+
+.new-img {
+pointer-events: none;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.new-info {
+  margin-top: 10px;
+}
+
+.new-name {
+  font-family: "Bellota", system-ui;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.new-price {
+  font-family: "Bellota", system-ui;
+  font-size: 13px;
+  color: #666;
+  position: relative;
+}
+
+.new-label {
+font-family: "Bellota", system-ui;
+  display: inline-block;
+  margin-left: 6px;
+  background-color: crimson;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.new-divider {
+  margin-top: 30px;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+/* стили для кнопок действий */
+.add-to-cart-btn, .add-to-wishlist-btn {
+    position: absolute;
+    z-index: 10;
+    background: rgba(255,255,255,0.9) !important;
+    border: 1px solid #ddd !important;
+    padding: 5px 10px !important;
+    border-radius: 4px;
+    font-size: 14px !important;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-btn {
+    left: 10px;
+}
+
+.add-to-wishlist-btn {
+    right: 10px;
+    padding: 5px !important;
+    font-size: 16px !important;
+    color: #ccc;
+}
+
+.add-to-cart-btn:hover, .add-to-wishlist-btn:hover {
+    background: #f8f8f8 !important;
+    border-color: #ccc !important;
+}
+
+.add-to-wishlist-btn.active, .add-to-wishlist-btn:hover {
+    color: #9F2042;
+}
+
+.shine-product-item, .catalog-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-product-img, .catalog-img {
+    pointer-events: none;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    transition: opacity 0.3s ease;
+}
+
+.shine-product-item:hover .shine-product-img,
+.catalog-card:hover .catalog-img {
+    opacity: 0.9;
+}
 /*--------------------------------------------------------------------------- СТРАНИЦА ОБ ИНФОРМАЦИИ О ТОВАРЕ -------------------------------------------------------------------------------------------------------------*/
 
 .productpage-container {
@@ -1522,422 +2231,139 @@ font-family: "Bellota", system-ui;
   color: #222;
 }
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ СТРАНИЦЫ ИНФЫ -------------------------------------------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------- АВТОРИЗАЦИЯ -------------------------------------------------------------------------------------------------------------*/
-.login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 200px 20px;
-  background: #fff;
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.login-box {
-  width: 100%;
-  max-width: 400px;
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  font-family: "Bellota", system-ui;
-  position: relative;
+.notification {
+    padding: 15px 25px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
 }
 
-.login-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
 }
 
-.login-icon {
-
-    font-style: normal;
-  font-size: 20px;
-  color: #333;
+.notification.success {
+    background-color: #4CAF50;
 }
 
-.login-header h2 {
-  font-family: "Bellota", system-ui;
-  flex-grow: 1;
-  text-align: center;
-  margin: 0;
-  font-size: 20px;
-  font-weight: 400;
+.notification.error {
+    background-color: #f44336;
 }
 
-
-.login-input {
-  width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+.notification i {
+    font-size: 1.2em;
 }
 
-.login-options {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 15px;
+/* Стили для заголовка с кнопкой избранного */
+.productpage-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
 }
 
-.login-forgot {
-  font-size: 12px;
-  color: #888;
-  text-decoration: none;
+.productpage-fav-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 0;
+    transition: color 0.2s;
 }
 
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background: #2d2d2d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
+.productpage-fav-btn:hover {
+    color: #9F2042;
 }
 
-.login-button:hover {
-  background: #000;
+.productpage-fav-btn .bi-heart-fill {
+    color: #9F2042;
 }
 
-.login-remember {
-  display: flex;
-  align-items: center;
-  margin-top: 15px;
-  font-size: 13px;
+/* Стили для кнопки Купить */
+.productpage-buy-btn {
+    font-family: "Bellota", system-ui;
+    padding: 10px 24px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 32px;
+    transition: background-color 0.2s;
 }
 
-.login-remember input {
-  margin-right: 8px;
+.productpage-buy-btn:hover {
+    background-color: #333;
 }
 
-.login-footer {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 13px;
-  color: #555;
+.productpage-buy-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
-.login-footer a {
-  color: #c27a54;
-  text-decoration: none;
+/*------------------------------------------------------------------------------------------------ УВЕДОМЛЕНИЯ ------------------------------------------------------------------------------------------------------*/
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.login-error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 15px;
-  text-align: center;
+.notification {
+    padding: 15px 25px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
 }
 
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ АВТОРИЗАЦИИ -------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------- РЕГИСТРАЦИЯ -------------------------------------------------------------------------------------------------------------*/
-.register-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 130px 20px;
-  background: #fff;
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
 }
 
-.register-box {
-  width: 100%;
-  max-width: 500px;
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  font-family: "Bellota", system-ui;
-  position: relative;
+.notification.success {
+    background-color: #4CAF50;
 }
 
-.register-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+.notification.error {
+    background-color: #f44336;
 }
 
-.register-icon {
-  font-style: normal;
-  font-size: 21px;
-  color: #333;
+.notification i {
+    font-size: 1.2em;
 }
-
-.register-header h2 {
-  font-family: "Bellota", system-ui;
-  flex-grow: 1;
-  text-align: center;
-  margin: 0;
-  font-size: 22px;
-  font-weight: 400;
-}
-
-.register-label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-size: 14px;
-  color: #555;
-}
-
-.register-box input {
-  width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-input[type="date"] {
-  padding: 10px 14px;
-  font-family: "Bellota", system-ui;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  background: #fff;
-  color: #333;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.4);
-}
-
-.register-button {
-  width: 100%;
-  padding: 12px;
-  background: #2d2d2d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.register-button:hover {
-  background: #000;
-}
-
-.register-error {
-  color: red;
-  font-size: 13px;
-  margin-bottom: 10px;
-}
-
-.register-footer {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 13px;
-  color: #555;
-}
-
-.register-footer a {
-  color: #c27a54;
-  text-decoration: none;
-}
-
-
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ РЕГИСТРАЦИИ -------------------------------------------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------- КАТАЛОГ -------------------------------------------------------------------------------------------------------------*/
-.catalog-section {
-  margin: auto;
-    max-width:1720px;
-    padding: 120px 20px 40px 20px;
-}
-
-.catalog-header {
-   display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.catalog-title {
-    font-family: "Great Vibes", cursive;
-    font-size: 40px;
-    font-weight: 400;
-}
-
-.catalog-button {
-display: inline-block;
-  padding: 10px 10px;
-  border: 1px solid #000;
-  color: #000;
-  text-decoration: none;
-  font-family: "Bellota", system-ui;
-  transition: 0.3s;
-}
-
-.catalog-button:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-  color:white;
-}
-
-.catalog-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.catalog-card {
-  width: 300px;
-  text-align: center;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s ease;
-}
-
-.catalog-card:hover {
-    transform: scale(1.03);
-}
-.catalog-img {
-    pointer-events: none;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.catalog-info {
-  margin-top: 10px;
-}
-
-.catalog-name {
-  font-family: "Bellota", system-ui;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
-.catalog-price {
-  font-family: "Bellota", system-ui;
-  font-size: 13px;
-  color: #666;
-}
-
-.catalog-divider {
-  margin-top: 30px;
-  border: none;
-  border-top: 1px solid #ccc;
-}
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ КАТАЛОГ -------------------------------------------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------- НОВИНКИ -------------------------------------------------------------------------------------------------------------*/
-.new-section {
-    margin: auto;
-    max-width:1720px;
-    padding: 120px 20px 40px 20px;
-}
-
-.new-title {
-  font-family: "Great Vibes", cursive;
-  font-size: 42px;
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.new-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 40px;
-}
-
-.new-category-title {
-  font-family: "Great Vibes", cursive;
-  font-size: 35px;
-}
-
-.new-button {
- display: inline-block;
-  padding: 10px 10px;
-  border: 1px solid #000;
-  color: #000;
-  text-decoration: none;
-  font-family: "Bellota", system-ui;
-  transition: 0.3s;
-}
-
-.new-button:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-  color:white;
-}
-
-.new-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.new-card {
-  width: 300px;
-  text-align: center;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s ease;
-}
-
-.new-card:hover {
-  transform: scale(1.03);
-}
-
-.new-img {
-pointer-events: none;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.new-info {
-  margin-top: 10px;
-}
-
-.new-name {
-  font-family: "Bellota", system-ui;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-.new-price {
-  font-family: "Bellota", system-ui;
-  font-size: 13px;
-  color: #666;
-  position: relative;
-}
-
-.new-label {
-font-family: "Bellota", system-ui;
-  display: inline-block;
-  margin-left: 6px;
-  background-color: crimson;
-  color: white;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.new-divider {
-  margin-top: 30px;
-  border: none;
-  border-top: 1px solid #ccc;
-}
-
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ НОВИНКИ -------------------------------------------------------------------------------------------------------------*/
-
-
 /*--------------------------------------------------------------------------- ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
 .shine-profile-container {
     display: flex;
@@ -2147,9 +2573,50 @@ font-family: "Bellota", system-ui;
 }
 
 .shine-address-actions, .shine-card-actions {
-    position: absolute;
-    right: 20px;
-    top: 20px;
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+.btn-outline-primary {
+    color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.shine-default-address {
+    border-left: 4px solid #4CAF50;
+    padding-left: 10px;
+}
+
+.shine-default-card {
+    border-left: 4px solid #4CAF50;
+    padding-left: 10px;
 }
 
 .shine-btn-set-default {
@@ -2352,59 +2819,889 @@ font-family: "Bellota", system-ui;
     background: #705B4F;
     color: white;
 }
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
 
-
+/*--------------------------------------------------------------------------- ПРОФИЛЬ АДМИНА -------------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------- КОРЗИНА -------------------------------------------------------------------------------------------------------------*/
 .cart-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.cart-header {
+    margin-bottom: 30px;
+}
+
+.cart-content {
+    display: flex;
+    gap: 30px;
+}
+
+.cart-items-container {
+    flex: 2;
+}
+
+.cart-summary {
+    flex: 1;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.cart-items-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 .cart-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    align-items: center;
 }
 
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.item-product {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-product a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s;
+}
+
+.item-product a:hover {
+    opacity: 0.8;
+}
+
+.item-details h3 {
+    margin-bottom: 5px;
+    font-size: 17px;
+    transition: color 0.3s;
+}
+
+.item-details a:hover h3 {
+    color: #8b5e3c;
+}
+
+.remove-item {
+    background: none;
+    border: none;
+    color: #9F2042;
+    cursor: pointer;
+    font-family: "Bellota", system-ui;
+    font-size: 14px;
+    padding: 0;
+    text-decoration: none;
+}
+
+.item-price, .item-total {
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quantity-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.quantity-btn:hover {
+    background: #e0e0e0;
+}
+
+.quantity-value {
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+}
+/* Стили для блока итого */
+.summary-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.summary-header h3 {
+    font-family: "Bellota", system-ui;
+    font-size: 18px;
+    margin: 0;
+}
+
+.summary-items {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-family: "Bellota", system-ui;
+    font-size: 14px;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .checkout-btn {
-  display: block;
-  background: #000;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  margin-top: 20px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.checkout-btn:hover {
+    background: #333;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 60px 0;
+    width: 100%;
+}
+
+.empty-cart p {
+    font-family: "Bellota", system-ui;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.continue-shopping {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+}
+
+/* Стили для уведомления */
+.cart-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-family: "Bellota", system-ui;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(200%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.cart-notification.show {
+    transform: translateX(0);
+}
+
+.notification-content i {
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    .cart-content {
+        flex-direction: column;
+    }
+
+    .cart-items-header {
+        display: none;
+    }
+
+    .cart-item {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .item-product {
+        grid-column: 1;
+    }
+
+    .item-price {
+        grid-column: 1;
+    }
+
+    .item-quantity {
+        grid-column: 1;
+    }
+
+    .item-total {
+        grid-column: 1;
+    }
+}
+
+* Уведомление о добавлении в корзину */
+.cart-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-family: "Bellota", system-ui;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(200%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.cart-notification.show {
+    transform: translateX(0);
+}
+
+.notification-content i {
+    font-size: 20px;
+}
+
+/* Счетчик в шапке */
+.cart-counter {
+    font-size: 10px;
+    background: #9F2042;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
 }
 
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ КОРЗИНЫ -------------------------------------------------------------------------------------------------------------*/
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
 
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+    background: #e0e0e0;
+}
+
+.quantity-input {
+    -moz-appearance: textfield;
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0 5px;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Стили для цен со скидкой */
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 14px;
+    display: block;
+}
+
+.discounted-price {
+    color: #9F2042;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.custom-notification {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    color: #333;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.custom-notification.error {
+    background: #fff0f0;
+    border-color: #ffcccc;
+    color: #9F2042;
+}
+
+.custom-notification.show {
+    transform: translateX(0);
+}
+
+.custom-notification.success {
+    background: #4CAF50;
+    color: white;
+}
+
+
+/* Стили для модального окна */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #f1f1f1;
+}
+
+.confirm-btn {
+    background: #9F2042;
+    color: white;
+}
 
 
 /*--------------------------------------------------------------------------- ИЗБРАННОЕ -------------------------------------------------------------------------------------------------------------*/
 
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ИЗБРАННОГО -------------------------------------------------------------------------------------------------------------*/
 
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------- ЗАКАЗ -------------------------------------------------------------------------------------------------------------*/
+.checkout-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+.checkout-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.checkout-form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.card-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.submit-order {
+    width: 100%;
+    padding: 15px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.submit-order:hover {
+    background: #333;
+}
+
+.cart-summary {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    height: fit-content;
+    width: 100%;
+    max-width: 350px;
+    margin-left: auto;
+}
+
+.summary-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.summary-header h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.summary-items {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.summary-totals {
+    margin-top: 20px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.grand-total {
+    font-weight: bold;
+    font-size: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.checkout-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 10px 20px;
+    width: 100%;
+    margin-top: 20px;
+    text-decoration: none;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.checkout-btn:hover {
+    background: #333;
+}
+
+.checkout-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/*--------------------------------------------------------------------------- ЧЕК -------------------------------------------------------------------------------------------------------------*/
+/* Order Confirmation (New Design) - ocd- prefix */
+.ocd-main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.ocd-order-title {
+    font-family: "Great Vibes", cursive;
+    font-size: 42px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.ocd-status-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.ocd-status-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.ocd-status-value {
+    font-weight: 600;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.ocd-order-date {
+    color: #888;
+    font-size: 14px;
+}
+
+.ocd-layout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.ocd-products-section,
+.ocd-info-section {
+    background: #f9f9f9;
+    height:fit-content;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.ocd-section-heading {
+    font-family: "Bellota", system-ui;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.ocd-items-container {
+    margin-bottom: 30px;
+}
+
+.ocd-line-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.ocd-product-name {
+    font-weight: 500;
+}
+
+.ocd-product-price {
+    font-weight: 600;
+}
+
+.ocd-totals-section {
+    margin-top: 30px;
+}
+
+.ocd-total-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ocd-discount-line {
+    color: #9F2042;
+}
+
+.ocd-grand-total {
+    font-weight: 600;
+    font-size: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.ocd-info-block {
+    margin-bottom: 30px;
+}
+
+.ocd-info-title {
+    font-family: "Bellota", system-ui;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.ocd-info-text {
+    margin: 8px 0;
+    color: #444;
+}
+
+.ocd-actions-block {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.ocd-primary-btn,
+.ocd-secondary-btn {
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.ocd-primary-btn {
+    background: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.ocd-primary-btn:hover {
+    background: #333;
+}
+
+.ocd-secondary-btn {
+    background: white;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.ocd-secondary-btn:hover {
+    background: #f5f5f5;
+}
+
+@media (max-width: 768px) {
+    .ocd-layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ocd-actions-block {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+/*--------------------------------------------------------------------------- О ЗАКАЗЕ -------------------------------------------------------------------------------------------------------------*/
+/* Order Detail Page - Unique Styles */
+.odp-main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.odp-order-title {
+    font-family: "Great Vibes", cursive;
+    font-size: 42px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.odp-status-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.odp-status-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.odp-status-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.odp-order-date {
+    color: #888;
+    font-size: 14px;
+}
+
+.odp-layout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+.odp-products-section {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.odp-section-heading {
+    font-family: "Bellota", system-ui;
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.odp-items-container {
+    margin-bottom: 30px;
+}
+
+.odp-line-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.odp-product-name {
+    font-weight: 500;
+}
+
+.odp-product-price {
+    font-weight: 600;
+}
+
+.odp-totals-section {
+    margin-top: 30px;
+}
+
+.odp-total-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.odp-discount-line {
+    color: #9F2042;
+}
+
+.odp-grand-total {
+    font-weight: 600;
+    font-size: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.odp-info-section {
+    height:fit-content;
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.odp-info-block {
+    margin-bottom: 30px;
+}
+
+.odp-info-title {
+    font-family: "Bellota", system-ui;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.odp-info-text {
+    margin: 8px 0;
+    color: #444;
+}
+
+@media (max-width: 768px) {
+    .odp-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
 
 
 
-/*--------------------------------------------------------------------------- АДАПТАЦИЯ ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
 
 

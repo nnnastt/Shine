@@ -19,7 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from webapp import views
-from webapp.views import (index, aboutus, FAQ, helper, profile,set_default_address, set_default_card, delivery, news, gift, catalog, contact, logout_view,
+from webapp.views import (index, aboutus, FAQ, helper, profile, set_default_address, set_default_card, delivery, news,
+                          gift, catalog, contact, logout_view,
                           register)
 from django.contrib.auth import views as auth_views
 
@@ -40,7 +41,18 @@ urlpatterns = [
                   path("login/", auth_views.LoginView.as_view(template_name='login.html'), name='login'),
                   path('register/', register, name='register'),
                   path('catalog/', catalog, name='catalog'),
-                  path('profile/address/<int:address_id>/default/', set_default_address, name='set_default_address'),
-                  path('profile/card/<int:card_id>/default/', set_default_card, name='set_default_card'),
-
+                  path('profile/address/<int:address_id>/default/', views.set_default_address,
+                       name='set_default_address'),
+                  path('profile/card/<int:card_id>/default/', views.set_default_card, name='set_default_card'),
+                  path('profile/address/<int:address_id>/delete/', views.delete_address, name='delete_address'),
+                  path('profile/card/<int:card_id>/delete/', views.delete_card, name='delete_card'),
+                  path('cart/', views.view_cart, name='view_cart'),
+                  path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+                  path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
+                  path('cart/update/<int:product_id>/', views.update_cart_item, name='update_cart_item'),
+                  path('checkout/', views.checkout, name='checkout'),
+                  path('confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+                  path('orders/', views.order_history, name='order_history'),
+                  path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+                  path('check-cart/', views.check_cart, name='check_cart'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="ohp-root-container">
+    <h1 class="ohp-page-header">Мои заказы</h1>
+
+    {% if orders %}
+    <div class="ohp-orders-grid">
+        {% for order in orders %}
+        <div class="ohp-order-unit">
+            <div class="ohp-order-topbar">
+                <span class="ohp-order-reference">Заказ #{{ order.id }}</span>
+                <span class="ohp-order-created">{{ order.order_date|date:"d.m.Y H:i" }}</span>
+                <span class="ohp-order-state ohp-state-{{ order.status|lower }}">{{ order.get_status_display }}</span>
+            </div>
+
+            <div class="ohp-order-content">вввввввввв
+                <div class="ohp-order-items">
+                    {% for item in order.items.all|slice:":3" %}
+                    <div class="ohp-order-row">
+                        <span>{{ item.product.name_product }} × {{ item.quantity }}</span>
+                        <span>{{ item.total_price }} ₽</span>
+                    </div>
+                    {% endfor %}
+                    {% if order.items.count > 3 %}
+                    <div class="ohp-additional-items">и еще {{ order.items.count|add:"-3" }} товаров</div>
+                    {% endif %}
+                </div>
+
+                <div class="ohp-order-summary">
+                    <span>Итого:</span>
+                    <span>{{ order.total }} ₽</span>
+                </div>
+            </div>
+
+            <div class="ohp-order-footer">
+                <a href="{% url 'order_detail' order.id %}" class="ohp-detail-link">Подробнее о заказе</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="ohp-empty-state">
+        <p class="ohp-empty-message">У вас пока нет заказов</p>
+        <a href="{% url 'catalog' %}" class="ohp-shopping-action">Начать покупки</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
