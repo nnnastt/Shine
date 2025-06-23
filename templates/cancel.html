@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Отмена заказа | Shine {% endblock %}
+{% block content %}
+<div class="shine-cancel-container">
+    <div class="shine-cancel-card">
+        <div class="shine-cancel-header">
+            <h2 class="shine-cancel-title">Отмена заказа #{{ order.id }}</h2>
+        </div>
+        <div class="shine-cancel-body">
+            <div class="shine-cancel-alert">
+                <strong>Текущий статус:</strong> {{ order.get_status_display }}
+            </div>
+            <form method="post" action="{% url 'update_order_status' order.id 'cancelled' %}" class="shine-cancel-form">
+                {% csrf_token %}
+                <div class="shine-cancel-form-group">
+                    <label for="reason" class="shine-cancel-label">Причина отмены:</label>
+                    <textarea class="shine-cancel-textarea" id="reason" name="reason" rows="3" required></textarea>
+                    <span class="shine-cancel-hint">Укажите подробную причину отмены заказа</span>
+                </div>
+                <div class="shine-cancel-actions">
+                    <a href="{% url 'panel_admina' %}" class="shine-cancel-btn shine-cancel-btn-secondary">Назад</a>
+                    <button type="submit" class="shine-cancel-btn shine-cancel-btn-danger">Подтвердить отмену</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

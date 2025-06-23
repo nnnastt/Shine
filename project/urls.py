@@ -21,7 +21,7 @@ from django.urls import path
 from webapp import views
 from webapp.views import (index, aboutus, FAQ, helper, profile, set_default_address, set_default_card, delivery, news,
                           gift, catalog, contact, logout_view,
-                          register)
+                          register, update_order_status, panel_admina, cancel_order)
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -55,4 +55,13 @@ urlpatterns = [
                   path('orders/', views.order_history, name='order_history'),
                   path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
                   path('check-cart/', views.check_cart, name='check_cart'),
+                  path('wishlist/count/', views.wishlist_count, name='wishlist_count'),
+                  path('wishlist/add/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+                  path('wishlist/remove/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+                  path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
+                  path('wishlist/', views.view_wishlist, name='view_wishlist'),
+                  path('admin-panel/', views.panel_admina, name='panel_admina'),
+                  path('admin-panel/update-status/<int:order_id>/<str:new_status>/',
+                       views.update_order_status, name='update_order_status'),
+                  path('admin-panel/cancel/<int:order_id>/', views.cancel_order, name='cancel_order'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

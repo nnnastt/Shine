@@ -36,7 +36,7 @@
             <div class="productpage-title-wrapper">
                 <h1 class="productpage-title">{{ product.name_product }}</h1>
                 <button class="productpage-fav-btn" data-product-id="{{ product.id }}">
-                    <i class="bi bi-heart"></i>
+                    <i class="bi {% if in_wishlist %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
                 </button>
             </div>
 
@@ -102,17 +102,6 @@
       });
     }
 
-    // Функция для очистки сообщения от лишних символов
-    function cleanErrorMessage(msg) {
-        if (!msg) return 'Произошла ошибка';
-        return msg.toString()
-            .replace(/^\[|\]$/g, '')  // Удаляем квадратные скобки
-            .replace(/^"|"$/g, '')    // Удаляем кавычки
-            .replace(/^'|'$/g, '')    // Удаляем апострофы
-            .trim();                  // Удаляем пробелы по краям
-    }
-
-    // Функция показа уведомления
     function showNotification(message, type = 'success', icon = null) {
         const container = document.querySelector('.notification-container');
         const notification = document.createElement('div');
@@ -133,6 +122,19 @@
         }, 3000);
     }
 
+    function updateCartCounter(count) {
+        document.querySelectorAll('.cart-counter').forEach(el => {
+            el.textContent = count;
+        });
+    }
+
+    function updateWishlistCounter(count) {
+        document.querySelectorAll('.wishlist-counter').forEach(el => {
+            el.textContent = count;
+            el.style.display = count > 0 ? 'block' : 'none';
+        });
+    }
+
     // Обработчик кнопки "Купить"
     document.querySelector('.productpage-buy-btn')?.addEventListener('click', function(e) {
         e.preventDefault();
@@ -151,8 +153,7 @@
                     updateCartCounter(data.cart_total);
                     showNotification('Товар добавлен в корзину', 'success', 'bi bi-cart');
                 } else {
-                    const cleanMsg = cleanErrorMessage(data.message);
-                    showNotification(cleanMsg, 'error', 'bi bi-exclamation-triangle');
+                    showNotification(data.message, 'error', 'bi bi-exclamation-triangle');
                 }
             })
             .catch(() => {
@@ -164,42 +165,39 @@
     });
 
     // Обработчик кнопки "В избранное"
-    document.querySelector('.productpage-fav-btn')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        const productId = this.dataset.productId;
-        const icon = this.querySelector('i');
-        {% if request.user.is_authenticated %}
-            fetch(`/wishlist/add/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    icon.classList.toggle('bi-heart-fill');
-                    icon.classList.toggle('bi-heart');
-                    const message = data.is_added ? 'Товар добавлен в избранное' : 'Товар удален из избранного';
-                    showNotification(message, 'success', 'bi bi-heart');
-                } else {
-                    const cleanMsg = cleanErrorMessage(data.message);
-                    showNotification(cleanMsg, 'error', 'bi bi-exclamation-triangle');
-                }
-            })
-            .catch(() => {
-                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
-            });
-        {% else %}
-            window.location.href = "{% url 'login' %}?next={{ request.path }}";
-        {% endif %}
-    });
+    document.querySelectorAll('.productpage-fav-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            const icon = this.querySelector('i');
 
-    function updateCartCounter(count) {
-        document.querySelectorAll('.cart-counter').forEach(el => {
-            el.textContent = count;
+            {% if request.user.is_authenticated %}
+                fetch(`/wishlist/toggle/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        icon.classList.toggle('bi-heart');
+                        icon.classList.toggle('bi-heart-fill');
+                        updateWishlistCounter(data.wishlist_count);
+                        const notificationType = data.is_added ? 'success' : 'info';
+                        showNotification(data.message, notificationType, 'bi bi-heart');
+                    } else {
+                        showNotification(data.message, 'error', 'bi bi-exclamation-triangle');
+                    }
+                })
+                .catch(() => {
+                    showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+                });
+            {% else %}
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+            {% endif %}
         });
-    }
+    });
 </script>
 {% endblock %}

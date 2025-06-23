@@ -75,7 +75,8 @@ class UserAddress(models.Model):
 
 # Платежные карты
 class PaymentCard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards', verbose_name='Пользователь',
+                             null=False)
     card_holder = models.CharField(max_length=100, verbose_name='Владелец карты')
     card_number = models.CharField(max_length=16, verbose_name='Номер карты')
     expiry_month = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)],
@@ -310,6 +311,7 @@ class Order(models.Model):
     phone = models.CharField(max_length=20, verbose_name='Телефон для заказа')
     notes = models.TextField(blank=True, verbose_name='Примечания к заказу')
     tracking_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='Трек-номер')
+    cancellation_reason = models.TextField(blank=True, null=True, verbose_name='Причина отмены')
 
     class Meta:
         ordering = ['-order_date']
@@ -323,7 +325,37 @@ class Order(models.Model):
     def total_price(self):
         return sum(item.total_price for item in self.items.all()) + self.shipping_cost - self.discount
 
+    @property
+    def status_color(self):
+        colors = {
+            'pending': 'secondary',
+            'processing': 'info',
+            'shipped': 'warning',
+            'delivered': 'success',
+            'cancelled': 'danger',
+        }
+        return colors.get(self.status, 'secondary')
 
+    def get_available_statuses(self):
+        """Возвращает доступные статусы для текущего состояния заказа"""
+        if self.status == 'pending':
+            return [('processing', 'В процессе'), ('cancelled', 'Отменен')]
+        elif self.status == 'processing':
+            return [('shipped', 'Отправлен'), ('cancelled', 'Отменен')]
+        elif self.status == 'shipped':
+            return [('delivered', 'Доставлен'), ('cancelled', 'Отменен')]
+        elif self.status == 'cancelled':
+            return []
+        return []
+
+    @property
+    def can_be_cancelled(self):
+        """Можно ли отменить заказ"""
+        return self.status in ['pending', 'processing', 'shipped']
+
+    @property
+    def status_css_class(self):
+        return f"shine-status-{self.status}"
 
 # Элементы заказа
 class OrderItem(models.Model):
@@ -344,6 +376,7 @@ class OrderItem(models.Model):
     def total_price(self):
         return self.price * self.quantity
 
+
 # Подтверждение заказа
 class OrderConfirmation(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='confirmation')
@@ -360,6 +393,8 @@ class OrderConfirmation(models.Model):
     def __str__(self):
         return f'Подтверждение #{self.confirmation_number}'
 
+
+
 #Избранное
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist', verbose_name='Пользователь')
@@ -370,6 +405,7 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f'Избранное пользователя {self.user.username}'
+
 
 #Избранное элемент
 class WishlistItem(models.Model):

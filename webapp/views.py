@@ -1,12 +1,12 @@
 import uuid
 from datetime import timedelta
 from decimal import Decimal
-
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from webapp.forms import RegisterForm, CheckoutForm, PaymentCardForm, AvatarUpdateForm, AddressForm, ProfileUpdateForm
 from webapp.models import (TypeProduct, ViewProduct, InfoProduct, ProductDetail, ProductWarning, UserInfo, UserAddress,
                            PaymentCard, OrderItem, Order, Cart, WishlistItem, CartItem, Wishlist)
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.db.models import Case, When, Value, IntegerField
 from django.contrib.auth import logout, login
@@ -44,6 +44,7 @@ def product_list_by_category(request, category_id):
             output_field=IntegerField()
         )
     )
+
     sort = request.GET.get('sort')
     if sort == 'price_asc':
         products = products.order_by('-is_available', 'price')
@@ -59,6 +60,19 @@ def product_list_by_category(request, category_id):
     material = request.GET.get('material')
     if material in ['gold', 'silver']:
         products = products.filter(type_material=material)
+
+    # Добавляем информацию о наличии в избранном
+    if request.user.is_authenticated:
+        wishlist_products = set(WishlistItem.objects.filter(
+            wishlist__user=request.user,
+            product__in=products
+        ).values_list('product_id', flat=True))
+
+        for product in products:
+            product.in_wishlist = product.id in wishlist_products
+    else:
+        for product in products:
+            product.in_wishlist = False
 
     return render(request, 'category.html', {
         'category': category,
@@ -82,7 +96,7 @@ def helper(request):
 def profile(request):
     user_info = UserInfo.objects.get_or_create(user=request.user)[0]
     addresses = UserAddress.objects.filter(user=request.user)
-    cards = PaymentCard.objects.filter(user=request.user)
+    cards = PaymentCard.objects.filter(user=request.user).order_by('-is_default', '-created_at')  # Добавлен order_by
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
 
     profile_form = ProfileUpdateForm(instance=user_info)
@@ -103,10 +117,6 @@ def profile(request):
             if address_form.is_valid():
                 address = address_form.save(commit=False)
                 address.user = request.user
-
-                if not addresses.exists():
-                    address.is_default = True
-
                 address.save()
                 messages.success(request, 'Адрес успешно добавлен!')
                 return redirect('profile')
@@ -116,10 +126,6 @@ def profile(request):
             if card_form.is_valid():
                 card = card_form.save(commit=False)
                 card.user = request.user
-
-                if not cards.exists():
-                    card.is_default = True
-
                 card.save()
                 messages.success(request, 'Карта успешно добавлена!')
                 return redirect('profile')
@@ -151,6 +157,8 @@ def set_default_address(request, address_id):
     address.is_default = True
     address.save()
     messages.success(request, 'Адрес установлен как основной')
+    if request.user.is_superuser:
+        return redirect(reverse('panel_admina') + '?section=addresses')
     return redirect('profile')
 
 
@@ -161,6 +169,8 @@ def set_default_card(request, card_id):
     card.is_default = True
     card.save()
     messages.success(request, 'Карта установлена как основная')
+    if request.user.is_superuser:
+        return redirect(reverse('panel_admina') + '?section=payment-methods')
     return redirect('profile')
 
 
@@ -173,6 +183,8 @@ def delete_address(request, address_id):
         new_default.save()
     address.delete()
     messages.success(request, 'Адрес успешно удалён')
+    if request.user.is_superuser:
+        return redirect(reverse('panel_admina') + '?section=addresses')
     return redirect('profile')
 
 
@@ -185,6 +197,8 @@ def delete_card(request, card_id):
         new_default.save()
     card.delete()
     messages.success(request, 'Карта успешно удалена')
+    if request.user.is_superuser:
+        return redirect(reverse('panel_admina') + '?section=payment-methods')
     return redirect('profile')
 
 
@@ -225,16 +239,26 @@ def product_view(request, pk):
     warnings = ProductWarning.objects.filter(product=info) if info else []
     category = product.category
     category_id = request.GET.get('category_id')
+
+    in_wishlist = False
+    if request.user.is_authenticated:
+        in_wishlist = WishlistItem.objects.filter(
+            wishlist__user=request.user,
+            product=product
+        ).exists()
+
     if category_id:
         category = get_object_or_404(TypeProduct, id=category_id)
     else:
         category = product.category
+
     return render(request, 'product.html', {
         'product': product,
         'info': info,
         'details': details,
         'warnings': warnings,
         'category': category,
+        'in_wishlist': in_wishlist,  # Добавляем в контекст
     })
 
 
@@ -264,11 +288,12 @@ def register(request):
                 phone=phone,
                 birth_date=birth_date
             )
+            Wishlist.objects.create(user=user)
             userinfo.save()
 
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно!')
-            return redirect('profile')
+            return redirect('main')
 
     context = {'form': form}
     return render(request, 'register.html', context)
@@ -287,7 +312,20 @@ def catalog(request):
             )
         ).order_by('-is_available', '-created_at')[:5]
 
+        if request.user.is_authenticated:
+            wishlist_products = set(WishlistItem.objects.filter(
+                wishlist__user=request.user,
+                product__in=products
+            ).values_list('product_id', flat=True))
+
+            for product in products:
+                product.in_wishlist = product.id in wishlist_products
+        else:
+            for product in products:
+                product.in_wishlist = False
+
         category_products.append((category, products))
+
     context = {'category_products': category_products}
     return render(request, 'catalog.html', context)
 
@@ -549,5 +587,236 @@ def order_history(request):
 
 @login_required
 def order_detail(request, order_id):
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order = get_object_or_404(Order, id=order_id)
+    if not request.user.is_superuser and order.user != request.user:
+        raise Http404("Заказ не найден")
     return render(request, 'order_detail.html', {'order': order})
+
+
+@login_required
+def view_wishlist(request):
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    return render(request, 'wishlist.html', {'wishlist': wishlist})
+
+@login_required
+def wishlist_count(request):
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+    return JsonResponse({'count': wishlist.items.count()})
+
+@require_POST
+@login_required
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(ViewProduct, pk=product_id)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+
+    try:
+        if WishlistItem.objects.filter(wishlist=wishlist, product=product).exists():
+            return JsonResponse({
+                'success': False,
+                'message': 'Товар уже в избранном'
+            })
+
+        WishlistItem.objects.create(wishlist=wishlist, product=product)
+        return JsonResponse({
+            'success': True,
+            'message': 'Товар добавлен в избранное',
+            'wishlist_count': wishlist.items.count()
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=400)
+
+@require_POST
+@login_required
+def remove_from_wishlist(request, product_id):
+    product = get_object_or_404(ViewProduct, pk=product_id)
+    wishlist = get_object_or_404(Wishlist, user=request.user)
+
+    try:
+        deleted_count, _ = WishlistItem.objects.filter(wishlist=wishlist, product=product).delete()
+        if deleted_count == 0:
+            return JsonResponse({
+                'success': False,
+                'message': 'Товар не найден в избранном'
+            }, status=404)
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Товар удален из избранного',
+            'wishlist_count': wishlist.items.count()
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=400)
+
+@require_POST
+@login_required
+def toggle_wishlist(request, product_id):
+    product = get_object_or_404(ViewProduct, pk=product_id)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+
+    try:
+        wishlist_item = WishlistItem.objects.filter(wishlist=wishlist, product=product).first()
+
+        if wishlist_item:
+            wishlist_item.delete()
+            message = 'Товар удален из избранного'
+            is_added = False
+        else:
+            WishlistItem.objects.create(wishlist=wishlist, product=product)
+            message = 'Товар добавлен в избранное'
+            is_added = True
+
+        return JsonResponse({
+            'success': True,
+            'is_added': is_added,
+            'message': message,
+            'wishlist_count': wishlist.items.count()
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=400)
+
+
+@login_required
+def panel_admina(request):
+    if not request.user.is_superuser:
+        return redirect('profile')
+
+    # Определяем активную секцию
+    active_section = request.GET.get('section', 'orders')
+
+    # Фильтрация заказов
+    status_filter = request.GET.get('status', 'all')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+
+    orders = Order.objects.all().order_by('-order_date')
+
+    if status_filter != 'all':
+        orders = orders.filter(status=status_filter)
+
+    if date_from:
+        orders = orders.filter(order_date__gte=date_from)
+
+    if date_to:
+        orders = orders.filter(order_date__lte=date_to)
+
+    # Статистика
+    total_orders = Order.objects.count()
+    pending_orders = Order.objects.filter(status='pending').count()
+    processing_orders = Order.objects.filter(status='processing').count()
+    delivered_orders = Order.objects.filter(status='delivered').count()
+
+    admin_info = UserInfo.objects.get_or_create(user=request.user)[0]
+    admin_addresses = UserAddress.objects.filter(user=request.user)
+    admin_cards = PaymentCard.objects.filter(user=request.user)
+
+    profile_form = ProfileUpdateForm(instance=admin_info)
+    address_form = AddressForm()
+    card_form = PaymentCardForm()
+
+    if request.method == 'POST':
+        if 'update_profile' in request.POST:
+            profile_form = ProfileUpdateForm(request.POST, instance=admin_info)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Профиль обновлен')
+                return redirect(f"{reverse('panel_admina')}?section=personal-info")
+
+        elif 'add_address' in request.POST:
+            address_form = AddressForm(request.POST)
+            if address_form.is_valid():
+                address = address_form.save(commit=False)
+                address.user = request.user
+                address.save()
+                messages.success(request, 'Адрес добавлен')
+                return redirect(f"{reverse('panel_admina')}?section=addresses")
+
+        elif 'add_card' in request.POST:
+            card_form = PaymentCardForm(request.POST)
+            if card_form.is_valid():
+                card = card_form.save(commit=False)
+                card.user = request.user
+                card.save()
+                messages.success(request, 'Карта добавлена')
+                return redirect(f"{reverse('panel_admina')}?section=payment-methods")
+
+    context = {
+        'order_list': orders,
+        'user_info': admin_info,
+        'addresses': admin_addresses,
+        'cards': admin_cards,
+        'profile_form': profile_form,
+        'address_form': address_form,
+        'card_form': card_form,
+        'status_choices': Order.ORDER_STATUS,
+        'status_filter': status_filter,
+        'date_from': date_from,
+        'date_to': date_to,
+        'total_orders': total_orders,
+        'pending_orders': pending_orders,
+        'processing_orders': processing_orders,
+        'delivered_orders': delivered_orders,
+        'active_section': active_section,
+    }
+    return render(request, 'panel_admina.html', context)
+
+
+@login_required
+def update_order_status(request, order_id, new_status):
+    if not request.user.is_superuser:
+        return redirect('profile')
+
+    order = get_object_or_404(Order, pk=order_id)
+    available_statuses = [status[0] for status in order.get_available_statuses()]
+
+    if new_status not in available_statuses:
+        messages.error(request, 'Невозможно изменить статус на выбранный')
+        return redirect('panel_admina')
+
+    if new_status == 'cancelled':
+        if request.method == 'POST':
+            reason = request.POST.get('reason', '')
+            if not reason:
+                messages.error(request, 'Укажите причину отмены')
+                return redirect('cancel_order', order_id=order.id)
+
+            order.status = 'cancelled'
+            order.cancellation_reason = reason
+            order.save()
+            messages.success(request, f'Заказ #{order.id} отменен')
+            return redirect('panel_admina')
+        else:
+            return redirect('cancel_order', order_id=order.id)
+    else:
+        order.status = new_status
+        if new_status == 'shipped':
+            order.tracking_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        order.save()
+        messages.success(request, f'Статус заказа #{order.id} изменен на "{order.get_status_display()}"')
+
+    return redirect('panel_admina')
+
+
+@login_required
+def cancel_order(request, order_id):
+    if not request.user.is_superuser:
+        return redirect('profile')
+
+    order = get_object_or_404(Order, pk=order_id)
+
+    if not order.can_be_cancelled:
+        messages.error(request, 'Этот заказ нельзя отменить')
+        return redirect('panel_admina')
+
+    if request.method == 'POST':
+        return update_order_status(request, order_id, 'cancelled')
+
+    return render(request, 'cancel.html', {'order': order})

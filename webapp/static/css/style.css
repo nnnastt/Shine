@@ -1090,10 +1090,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         font-size: 35px;
     }
 
-    .company-story-section {
-        padding: 50px 0;
-    }
-
     .company-text-section {
         padding: 40px 20px;
     }
@@ -1629,7 +1625,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .shine-category-section{
     margin: auto;
     max-width:1720px;
-    padding: 100px 20px;
+    padding: 100px 100px 30px 100px;
 }
 .shine-category-wrapper {
      display: flex;
@@ -1852,8 +1848,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .catalog-button:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-  color:white;
+  background-color: rgba(255, 255, 255, 0.97);
 }
 
 .catalog-row {
@@ -1951,8 +1946,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .new-button:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-  color:white;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .new-row {
@@ -2019,11 +2013,10 @@ font-family: "Bellota", system-ui;
     position: absolute;
     z-index: 10;
     background: rgba(255,255,255,0.9) !important;
-    border: 1px solid #ddd !important;
     padding: 5px 10px !important;
-    border-radius: 4px;
     font-size: 14px !important;
     transition: all 0.3s ease;
+    border:0;
 }
 
 .add-to-cart-btn {
@@ -2033,8 +2026,25 @@ font-family: "Bellota", system-ui;
 .add-to-wishlist-btn {
     right: 10px;
     padding: 5px !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     color: #ccc;
+}
+
+.bi-heart {
+    transition: all 0.2s;
+}
+
+.bi-heart-fill {
+    color: #dc3545;
+    transition: all 0.2s;
+}
+
+.productpage-fav-btn, .add-to-wishlist-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.2rem;
 }
 
 .add-to-cart-btn:hover, .add-to-wishlist-btn:hover {
@@ -2044,6 +2054,16 @@ font-family: "Bellota", system-ui;
 
 .add-to-wishlist-btn.active, .add-to-wishlist-btn:hover {
     color: #9F2042;
+}
+
+.notification.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #0c5460;
+}
+
+.notification.info i {
+    color: #0c5460;
 }
 
 .shine-product-item, .catalog-card {
@@ -2105,6 +2125,7 @@ font-family: "Bellota", system-ui;
 }
 
 .productpage-breadcrumbs {
+text-align: left;
     font-family: "Bellota", system-ui;
   font-size: 17px;
   color: #999;
@@ -2119,7 +2140,7 @@ font-family: "Bellota", system-ui;
 
 .productpage-title {
 font-family: "Great Vibes", cursive;
-  font-size: 35px;
+  font-size: 42px;
   font-weight: 400;
   margin-bottom: 12px;
 }
@@ -2206,7 +2227,6 @@ font-family: "Bellota", system-ui;
 }
 
 .product-detail-table {
-
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
@@ -2367,7 +2387,7 @@ font-family: "Bellota", system-ui;
 /*--------------------------------------------------------------------------- ПРОФИЛЬ -------------------------------------------------------------------------------------------------------------*/
 .shine-profile-container {
     display: flex;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 40px auto;
     gap: 30px;
     padding: 100px 0;
@@ -2445,9 +2465,11 @@ font-family: "Bellota", system-ui;
     margin: 0 0 10px;
     font-size: 22px;
     color: #333;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-profile-info p {
+    font-family: "Bellota", system-ui;
     margin: 5px 0;
     color: #666;
     font-size: 15px;
@@ -2455,7 +2477,7 @@ font-family: "Bellota", system-ui;
 
 .shine-profile-info i {
     margin-right: 8px;
-    color: #8b5e3c;
+    color: #333;
 }
 
 .shine-profile-nav ul {
@@ -2475,11 +2497,12 @@ font-family: "Bellota", system-ui;
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.2s;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-profile-nav a:hover, .shine-profile-nav a.shine-nav-active {
     background: #f8f8f8;
-    color: #8b5e3c;
+    color: #8636564;
 }
 
 .shine-profile-nav i {
@@ -2503,9 +2526,11 @@ font-family: "Bellota", system-ui;
 .shine-profile-section h2 {
     margin-top: 0;
     margin-bottom: 25px;
-    font-size: 24px;
+    font-size: 42px;
     color: #333;
     font-weight: 500;
+    font-family: "Great Vibes", cursive;
+    text-align:center
 }
 
 .shine-profile-form .shine-form-row {
@@ -2527,6 +2552,8 @@ font-family: "Bellota", system-ui;
     margin-bottom: 8px;
     font-size: 14px;
     color: #555;
+    font-family: "Bellota", system-ui;
+    font-weight: 500;
 }
 
 .shine-form-group input, .shine-form-group select, .shine-form-group textarea {
@@ -2535,10 +2562,11 @@ font-family: "Bellota", system-ui;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 15px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-save {
-    background: #8b5e3c;
+    background: #000;
     color: white;
     border: none;
     padding: 12px 25px;
@@ -2546,10 +2574,12 @@ font-family: "Bellota", system-ui;
     cursor: pointer;
     font-size: 15px;
     transition: background 0.2s;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
 }
 
 .shine-btn-save:hover {
-    background: #705B4F;
+    background: #333;
 }
 
 .shine-addresses-list, .shine-cards-list, .shine-orders-list {
@@ -2562,14 +2592,16 @@ font-family: "Bellota", system-ui;
     padding: 20px;
     margin-bottom: 15px;
     position: relative;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-address-card.shine-default-address, .shine-card-item.shine-default-card {
-    border-left: 4px solid #8b5e3c;
+    border-left: 4px solid #333;
 }
 
 .shine-address-content p, .shine-card-info p {
     margin: 5px 0;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-address-actions, .shine-card-actions {
@@ -2578,69 +2610,31 @@ font-family: "Bellota", system-ui;
     margin-top: 15px;
 }
 
-
-.btn-outline-primary {
-    color: #4CAF50;
-    border-color: #4CAF50;
-}
-
-.btn-outline-primary:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.btn-outline-secondary {
-    color: #6c757d;
-    border-color: #6c757d;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: white;
-}
-
-.btn-outline-danger {
-    color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-    background-color: #dc3545;
-    color: white;
-}
-
-.shine-default-address {
-    border-left: 4px solid #4CAF50;
-    padding-left: 10px;
-}
-
-.shine-default-card {
-    border-left: 4px solid #4CAF50;
-    padding-left: 10px;
-}
-
 .shine-btn-set-default {
     background: none;
-    border: 1px solid #8b5e3c;
-    color: #8b5e3c;
+    border: 1px solid #000;
+    color: #000;
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 13px;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-set-default:hover {
-    background: #8b5e3c;
-    color: white;
+    background: #ffffff;
+    color: black;
 }
 
 .shine-default-badge {
-    background: #8b5e3c;
+    background: #000;
     color: white;
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 13px;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
 }
 
 .shine-empty-message {
@@ -2648,22 +2642,25 @@ font-family: "Bellota", system-ui;
     padding: 30px;
     color: #888;
     font-size: 16px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-add-new {
     background: none;
-    border: 1px dashed #8b5e3c;
-    color: #8b5e3c;
+    border: 1px dashed #000;
+    color: #000;
     padding: 10px 15px;
     border-radius: 6px;
     font-size: 15px;
     cursor: pointer;
     width: 100%;
     transition: all 0.2s;
+    font-family: "Bellota", system-ui;
+    font-weight: 500;
 }
 
 .shine-btn-add-new:hover {
-    background: rgba(139, 94, 60, 0.1);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .shine-address-form-container, .shine-card-form-container {
@@ -2672,6 +2669,7 @@ font-family: "Bellota", system-ui;
     padding: 20px;
     background: #f9f9f9;
     border-radius: 8px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-form-actions {
@@ -2690,6 +2688,7 @@ font-family: "Bellota", system-ui;
     cursor: pointer;
     font-size: 15px;
     transition: background 0.2s;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-cancel:hover {
@@ -2721,19 +2720,13 @@ font-family: "Bellota", system-ui;
 .shine-card-type {
     font-weight: 500;
     color: #333;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-card-number, .shine-card-expiry {
     color: #666;
     font-size: 14px;
-}
-
-.shine-order-card {
-    transition: all 0.2s;
-}
-
-.shine-order-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Bellota", system-ui;
 }
 
 .shine-order-header {
@@ -2763,43 +2756,47 @@ font-family: "Bellota", system-ui;
 .shine-order-status {
     display: inline-block;
     padding: 3px 8px;
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-radius: 4px;
     font-size: 13px;
     margin-right: 10px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-order-total {
     font-weight: 500;
     color: #333;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-view {
-    color: #8b5e3c;
+    color: #333;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-view:hover {
     text-decoration: underline;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-empty-orders {
     text-align: center;
     padding: 40px 20px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-empty-orders i {
     font-size: 50px;
     color: #ddd;
     margin-bottom: 15px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-empty-orders p {
     color: #888;
     margin-bottom: 20px;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-shopping {
@@ -2813,14 +2810,758 @@ font-family: "Bellota", system-ui;
     text-decoration: none;
     display: inline-block;
     transition: background 0.2s;
+    font-family: "Bellota", system-ui;
 }
 
 .shine-btn-shopping:hover {
-    background: #705B4F;
+    background: #333;
     color: white;
+    font-family: "Bellota", system-ui;
 }
 
 /*--------------------------------------------------------------------------- ПРОФИЛЬ АДМИНА -------------------------------------------------------------------------------------------------------------*/
+.admin-profile-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 40px auto;
+    gap: 30px;
+    padding: 100px 0;
+}
+
+.admin-profile-sidebar {
+    flex: 0 0 300px;
+}
+
+.admin-profile-content {
+    flex: 1;
+}
+
+.admin-profile-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.admin-avatar-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.admin-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.admin-profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f8f8f8;
+}
+
+.admin-default-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    color: #ccc;
+    border: 3px solid #f8f8f8;
+}
+
+.admin-avatar-upload-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    color: #555;
+}
+
+#id_avatar {
+    display: none;
+}
+
+.admin-profile-info h2 {
+    font-family: "Bellota", system-ui;
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: #333;
+}
+
+.admin-profile-info p {
+    font-family: "Bellota", system-ui;
+    margin: 5px 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.admin-profile-info i {
+    margin-right: 8px;
+    color: #333;
+}
+
+.admin-profile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-profile-nav li {
+    margin-bottom: 5px;
+}
+
+.admin-profile-nav a {
+    display: block;
+    padding: 12px 15px;
+    color: #555;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-profile-nav a:hover, .admin-profile-nav a.admin-nav-active {
+    background: #f8f8f9;
+    color:#636564;
+}
+
+.admin-profile-nav i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.admin-profile-section {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.admin-profile-section.admin-section-active {
+    display: block;
+}
+
+.admin-profile-section h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 42px;
+    color: #333;
+    font-weight: 500;
+    font-family: "Great Vibes", cursive;
+    text-align:center
+}
+
+.admin-profile-form .admin-form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.admin-profile-form .admin-form-row .admin-form-group {
+    flex: 1;
+}
+
+.admin-form-group {
+    margin-bottom: 20px;
+}
+
+.admin-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+    font-family: "Bellota", system-ui;
+    font-weight: 500;
+}
+
+.admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-btn-save {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+}
+
+.admin-btn-save:hover {
+    background: #333;
+}
+
+.admin-addresses-list, .admin-cards-list, .admin-orders-list {
+    margin-bottom: 30px;
+}
+
+.admin-address-card, .admin-card-item, .admin-order-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    position: relative;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-address-card.admin-default-address, .admin-card-item.admin-default-card {
+    border-left: 4px solid #333;
+}
+
+.admin-address-content p, .admin-card-info p {
+    margin: 5px 0;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-address-actions, .admin-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.admin-btn-set-default {
+    background: none;
+    border: 1px solid #000;
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-btn-set-default:hover {
+    background: #ffffff;
+    color: black;
+}
+
+.admin-default-badge {
+    background: #000;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+}
+
+.admin-empty-message {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-size: 16px;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-btn-add-new {
+    background: none;
+    border: 1px dashed #000;
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    font-family: "Bellota", system-ui;
+    font-weight: 500;
+}
+
+.admin-btn-add-new:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.admin-address-form-container, .admin-card-form-container {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.admin-btn-cancel {
+    background: #f0f0f0;
+    color: #555;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.admin-card-icon {
+    font-size: 40px;
+    margin-right: 15px;
+    float: left;
+}
+
+.admin-visa-icon {
+    color: #1a1f71;
+}
+
+.admin-mastercard-icon {
+    color: #eb001b;
+}
+
+.admin-mir-icon {
+    color: #1e5f8a;
+}
+
+.admin-card-info {
+    overflow: hidden;
+}
+
+.admin-card-type {
+    font-weight: 500;
+    color: #333;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-card-number, .admin-card-expiry {
+    color: #666;
+    font-size: 14px;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-btn-delete {
+    background: none;
+    border: none;
+    color: #dc3545;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.admin-btn-delete:hover {
+    color: #c82333;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+/* Стили для управления заказами */
+.admin-orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+ }
+
+.admin-orders-filters {
+    font-family: "Bellota", system-ui;
+    font-size: 17px;
+    font-weight: 400;
+    display: flex;
+    gap: 10px;
+}
+
+.admin-filters-form {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-filter-group {
+    display: flex;
+    align-items: center;
+}
+
+.admin-filter-select,
+.admin-filter-date {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-filter-submit {
+    padding: 8px 16px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Bellota", system-ui;
+}
+
+.admin-orders-table-container {
+    overflow-x: auto;
+}
+
+.admin-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-orders-header-row {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.admin-order-col-id,
+.admin-order-col-date,
+.admin-order-col-amount,
+.admin-order-col-status,
+.admin-order-col-cancel {
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 170px;
+    padding: 12px 12px;
+}
+
+.admin-order-col-client {
+    width: 160px;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 12px 12px;
+}
+
+.admin-order-col-actions {
+    width: 200px;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 12px 12px;
+}
+
+.admin-order-col-comment {
+    padding: 12px 12px;
+    width: 250px;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.admin-order-row {
+    border-bottom: 1px solid #eee;
+}
+
+.admin-order-row:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-order-cell-id{
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.admin-order-cell-date{
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 16px;
+    color: #888;
+}
+
+.admin-order-cell-client{
+    padding: 12px 12px;
+    vertical-align: middle;
+    text-align:left;
+    font-family: "Bellota", system-ui;
+    font-weight: 400;
+    font-size: 16px;
+}
+.admin-order-cell-amount{
+    padding: 12px 12px;
+    vertical-align: middle;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.admin-order-cell-status,
+.admin-order-cell-actions,
+.admin-order-cell-cancel{
+    padding: 12px 12px;
+    vertical-align: middle;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.admin-order-cell-comment {
+    padding: 12px 12px;
+    vertical-align: middle;
+    text-align:center;
+    font-family: "Bellota", system-ui;
+    font-weight: 400;
+    font-size: 18px;
+    color: #666;
+}
+.admin-order-link {
+    color: #333;
+    text-decoration: none;
+    font-family: "Bellota", system-ui;
+
+}
+
+.admin-order-client-name {
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    font-family: "Bellota", system-ui;
+}
+
+
+.admin-order-status-badge {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.admin-status-pending {
+    color: #6c757d;
+}
+
+.admin-status-processing {
+    color: #ffc107;
+}
+
+.admin-status-shipped {
+    color: #17a2b8;
+}
+
+.admin-status-delivered {
+    color: #28a745;
+}
+
+.admin-status-cancelled {
+    color: #dc3545;
+}
+
+.admin-order-action-form {
+    margin: 0;
+}
+
+.admin-order-action-btn {
+    font-size: 16px;
+    border: 1px solid #6c757d;
+    background-color: white;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.admin-action-processing {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.admin-action-shipped {
+    border-color: #17a2b8;
+    color: #17a2b8;
+}
+
+.admin-action-delivered {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.admin-order-cancel-btn {
+    padding: 4px 8px;
+    font-size: 16px;
+    border: 1px solid #dc3545;
+    background-color: white;
+    color: #dc3545;
+    text-decoration: none;
+    cursor: pointer;
+    text-transform: none;
+}
+
+.admin-orders-empty {
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.admin-orders-empty-message {
+    color: #6c757d;
+}
+
+
+/* --------------------------------------------------------------------------------------- СТРАНИЦА ОТМЕНЫ ЗАКАЗА ----------------------------------------------------------------------------------- */
+.shine-cancel-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.shine-cancel-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.shine-cancel-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.shine-cancel-title {
+    font-family: "Great Vibes", cursive;
+    font-size: 35px;
+    color: #333;
+    margin: 0;
+    font-weight: 400;
+}
+
+.shine-cancel-body {
+    padding: 30px;
+}
+
+.shine-cancel-alert {
+    background: #f8f8f8;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    font-family: "Bellota", system-ui;
+    font-size: 16px;
+}
+
+.shine-cancel-alert strong {
+    font-weight: 600;
+}
+
+.shine-cancel-form {
+    margin-top: 20px;
+}
+
+.shine-cancel-form-group {
+    margin-bottom: 25px;
+}
+
+.shine-cancel-label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: "Bellota", system-ui;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+.shine-cancel-textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: "Bellota", system-ui;
+    font-size: 15px;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.shine-cancel-textarea:focus {
+    outline: none;
+    border-color: #8b5e3c;
+}
+
+.shine-cancel-hint {
+    display: block;
+    margin-top: 8px;
+    font-family: "Bellota", system-ui;
+    font-size: 13px;
+    color: #888;
+}
+
+.shine-cancel-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.shine-cancel-btn {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-family: "Bellota", system-ui;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.shine-cancel-btn-secondary {
+    background: #f8f8f8;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.shine-cancel-btn-secondary:hover {
+    background: #f0f0f0;
+}
+
+.shine-cancel-btn-danger {
+    background: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.shine-cancel-btn-danger:hover {
+    background: #333;
+}
+
+
+
+
+
 
 /*--------------------------------------------------------------------------- КОРЗИНА -------------------------------------------------------------------------------------------------------------*/
 .cart-container {
@@ -2835,6 +3576,7 @@ font-family: "Bellota", system-ui;
 }
 
 .cart-content {
+    margin-top: 30px;
     display: flex;
     gap: 30px;
 }
@@ -2900,7 +3642,7 @@ font-family: "Bellota", system-ui;
 }
 
 .item-details a:hover h3 {
-    color: #8b5e3c;
+    color: #333;
 }
 
 .remove-item {
@@ -2971,6 +3713,7 @@ font-family: "Bellota", system-ui;
     margin-bottom: 10px;
     font-family: "Bellota", system-ui;
     font-size: 14px;
+    gap:35px;
 }
 
 .summary-total {
@@ -3011,14 +3754,18 @@ font-family: "Bellota", system-ui;
 }
 
 .continue-shopping {
-    display: inline-block;
-    padding: 10px 20px;
     background: #000;
     color: #fff;
-    text-decoration: none;
+    border: none;
     border-radius: 6px;
-    font-family: "Bellota", system-ui;
     font-size: 16px;
+    padding: 10px 20px;
+    width: 100%;
+    margin-top: 20px;
+    text-decoration: none;
+    transition: background 0.3s;
+    cursor: pointer;
+    text-align:center;
 }
 
 /* Стили для уведомления */
@@ -3121,7 +3868,20 @@ font-family: "Bellota", system-ui;
     top: -5px;
     right: -5px;
 }
-
+.wishlist-counter {
+    font-size: 10px;
+    background: #9F2042;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
 
 .quantity-controls {
     display: flex;
@@ -3215,6 +3975,9 @@ font-family: "Bellota", system-ui;
     z-index: 2000;
     justify-content: center;
     align-items: center;
+    font-family: "Bellota", system-ui;
+    font-size:16px;
+    font-weight:400;
 }
 
 .modal-content {
@@ -3244,14 +4007,198 @@ font-family: "Bellota", system-ui;
 }
 
 .confirm-btn {
-    background: #9F2042;
-    color: white;
+    background: #000;
+    color: #fff;
+    text-align:center;
+    font-family: "Bellota", system-ui;
 }
 
 
 /*--------------------------------------------------------------------------- ИЗБРАННОЕ -------------------------------------------------------------------------------------------------------------*/
+.wishlist-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    font-family: "Bellota", system-ui;
+}
+
+.wishlist-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.wishlist-header h1 {
+    font-family: "Great Vibes", cursive;
+    font-size: 42px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: #333;
+}
 
 
+.wishlist-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.wishlist-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.wishlist-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.wishlist-card-image {
+    pointer-events: none;
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+}
+
+.wishlist-card-img {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.wishlist-unavailable-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #9F2042;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.wishlist-card-body {
+    padding: 20px;
+}
+
+.wishlist-card-title {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+    transition: color 0.3s;
+}
+
+.wishlist-card-title h3 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wishlist-card-title:hover {
+    color: #8b5e3c;
+}
+
+.wishlist-card-price {
+    margin: 15px 0;
+    font-size: 18px;
+    font-weight: 500;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.discounted-price {
+    color: #9F2042;
+    font-weight: bold;
+}
+
+.current-price {
+    color: #333;
+}
+
+.wishlist-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.wishlist-card-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.wishlist-add-to-cart {
+background: #f8f8f8;
+    color: black;
+}
+
+.wishlist-add-to-cart:hover {
+    background: #f0f0f0;
+}
+
+.wishlist-remove-item {
+    background: #f8f8f8;
+    color: #9F2042;
+}
+
+.wishlist-remove-item:hover {
+    background: #f0f0f0;
+}
+
+.empty-wishlist {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-wishlist p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.wishlist-continue-shopping {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #000;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.wishlist-continue-shopping:hover {
+    background: #333;
+}
 
 
 /*--------------------------------------------------------------------------- ЗАКАЗ -------------------------------------------------------------------------------------------------------------*/
@@ -3320,7 +4267,7 @@ font-family: "Bellota", system-ui;
     border-radius: 8px;
     height: fit-content;
     width: 100%;
-    max-width: 350px;
+    max-width: 415px;
     margin-left: auto;
 }
 
@@ -3388,7 +4335,6 @@ font-family: "Bellota", system-ui;
 }
 
 /*--------------------------------------------------------------------------- ЧЕК -------------------------------------------------------------------------------------------------------------*/
-/* Order Confirmation (New Design) - ocd- prefix */
 .ocd-main-wrapper {
     max-width: 1200px;
     margin: 0 auto;
@@ -3678,7 +4624,8 @@ font-family: "Bellota", system-ui;
     font-size: 18px;
     margin-top: 0;
     margin-bottom: 15px;
-    color: #555;
+    color: #333;
+    font-weight:600;
 }
 
 .odp-info-text {

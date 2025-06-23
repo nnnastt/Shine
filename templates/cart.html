@@ -66,7 +66,7 @@
                 <div class="summary-item" data-product-id="{{ item.product.id }}">
                     <span>{{ item.product.name_product }} × <span
                             class="item-quantity-display">{{ item.quantity }}</span></span>
-                    <span class="item-total-display">{{ item.total_price }} ₽</span>
+                    <span class="item-total-display">{{ item.total_price }}₽</span>
                 </div>
                 {% endfor %}
             </div>
@@ -74,7 +74,7 @@
                 <span>Итого:</span>
                 <span class="total-price">{{ cart.total_price }} ₽</span>
             </div>
-            <div class="">
+            <div class="" style="display: flex;padding: 15px 0; justify-content: center;">
                 <a href="{% url 'checkout' %}" class="continue-shopping" id="checkout-btn"
                    {% if not cart.items.all %}style="pointer-events: none; opacity: 0.5;"{% endif %}>
                     Оформить заказ
@@ -345,8 +345,16 @@
                 );
             });
         });
-
-
     });
+    function updateCartCounter(count) {
+    document.querySelectorAll('.cart-counter').forEach(el => {
+        el.textContent = count;
+    });
+    // Также обновим счетчик в шапке, если он есть
+    const headerCartCounter = document.querySelector('.header-cart-count');
+    if (headerCartCounter) {
+        headerCartCounter.textContent = count;
+    }
+}
 </script>
 {% endblock %}

@@ -1,6 +1,183 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %} Избранное | Shine {% endblock %}
-{% block content %}
 
+{% block content %}
+<div class="wishlist-container">
+    <div class="wishlist-header">
+        <div class="productpage-breadcrumbs">
+            <a href="{% url 'main' %}" class="productpage-breadcrumb-link">Главная</a> /
+            <span class="productpage-breadcrumb-link">Избранное</span>
+        </div>
+        <h1 class="wishlist-title">Избранное</h1>
+    </div>
+
+    <div class="wishlist-content">
+        {% if wishlist.items.all %}
+        <div class="wishlist-cards-container">
+            {% for item in wishlist.items.all %}
+            <div class="wishlist-card" data-product-id="{{ item.product.id }}">
+                <div class="wishlist-card-image">
+                    <a href="{% url 'product_view' item.product.id %}">
+                        <img src="{{ item.product.product.url }}" alt="{{ item.product.name_product }}" class="wishlist-card-img">
+                    </a>
+                    {% if not item.product.is_active or item.product.quantity == 0 %}
+                    <span class="wishlist-unavailable-badge">Нет в наличии</span>
+                    {% endif %}
+                </div>
+                <div class="wishlist-card-body">
+                    <a href="{% url 'product_view' item.product.id %}" class="wishlist-card-title">
+                        <h3>{{ item.product.name_product }}</h3>
+                    </a>
+                    <div class="wishlist-card-price">
+                        {% if item.product.discount %}
+                        <span class="old-price">{{ item.product.price }} ₽</span>
+                        <span class="discounted-price">{{ item.product.final_price }} ₽</span>
+                        {% else %}
+                        <span class="current-price">{{ item.product.price }} ₽</span>
+                        {% endif %}
+                    </div>
+                    <div class="wishlist-card-actions">
+                        {% if item.product.is_active and item.product.quantity > 0 %}
+                        <button class="wishlist-card-btn wishlist-add-to-cart" data-product-id="{{ item.product.id }}" title="Добавить в корзину">
+                            <i class="bi bi-cart-plus"></i> В корзину
+                        </button>
+                        {% endif %}
+                        <button class="wishlist-card-btn wishlist-remove-item" data-product-id="{{ item.product.id }}" title="Удалить из избранного">
+                            <i class="bi bi-heart-fill"></i> Удалить
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-wishlist">
+            <p>Ваш список избранного пуст</p>
+            <a href="{% url 'catalog' %}" class="wishlist-continue-shopping">Продолжить покупки</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function showNotification(message, type = 'success', icon = null) {
+        const container = document.querySelector('.notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        notification.innerHTML = `
+            ${icon ? `<i class="${icon}"></i>` : ''}
+            <span class="notification-message">${message}</span>
+        `;
+
+        container.appendChild(notification);
+
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    function updateCartCounter(count) {
+        document.querySelectorAll('.cart-counter').forEach(el => {
+            el.textContent = count;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Удаление товара из избранного
+        document.querySelectorAll('.wishlist-remove-item').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                const cardElement = this.closest('.wishlist-card');
+
+                fetch(`/wishlist/remove/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        cardElement.remove();
+                        updateWishlistCounter(data.wishlist_count);
+                        showNotification('Товар удалён из избранного', 'info', 'bi bi-heart');
+
+                        if (data.wishlist_count == 0) {
+                            document.querySelector('.wishlist-content').innerHTML = `
+                                <div class="empty-wishlist">
+                                    <p>Ваш список избранного пуст</p>
+                                    <a href="{% url 'catalog' %}" class="wishlist-continue-shopping">Продолжить покупки</a>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        showNotification(data.message, 'error', 'bi bi-exclamation-triangle');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+                });
+            });
+        });
+
+        // Добавление товара в корзину из избранного
+        document.querySelectorAll('.wishlist-add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                const cardElement = this.closest('.wishlist-card');
+
+                fetch(`/cart/add/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartCounter(data.cart_total);
+                        showNotification('Товар добавлен в корзину', 'success', 'bi bi-cart');
+
+                        fetch(`/wishlist/remove/${productId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(wishlistData => {
+                            if (wishlistData.success) {
+                                cardElement.remove();
+                                updateWishlistCounter(wishlistData.wishlist_count);
+                                showNotification('Товар удалён из избранного', 'info', 'bi bi-heart');
+
+                                if (wishlistData.wishlist_count == 0) {
+                                    document.querySelector('.wishlist-content').innerHTML = `
+                                        <div class="empty-wishlist">
+                                            <p>Ваш список избранного пуст</p>
+                                            <a href="{% url 'catalog' %}" class="wishlist-continue-shopping">Продолжить покупки</a>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        });
+                    } else {
+                        showNotification(data.message, 'error', 'bi bi-exclamation-triangle');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}

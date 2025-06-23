@@ -2,8 +2,10 @@
 {% load static %}
 {% block title %} Каталог | Shine {% endblock %}
 {% block content %}
+
+
+<section class="catalog-section"><h2 class="new-title">Каталог</h2>
 {% for category, products in category_products %}
-<section class="catalog-section">
     <div class="catalog-header">
         <h2 class="catalog-title">{{ category.name }}</h2>
         <a href="{{ category.get_absolute_url }}" class="catalog-button">Открыть все</a>
@@ -15,7 +17,7 @@
                 <i class="bi bi-plus-circle"></i> В корзину
             </button>
             <button class="add-to-wishlist-btn" data-product-id="{{ product.id }}">
-                <i class="bi bi-heart"></i>
+                <i class="bi {% if product.in_wishlist %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
             </button>
 
             <a href="{{ product.get_absolute_url }}" class="catalog-product-link">
@@ -28,9 +30,9 @@
         </div>
         {% endfor %}
     </div>
-    <hr class="catalog-divider">
+    <hr class="catalog-divider">{% endfor %}
 </section>
-{% endfor %}
+
 <script>
     function showNotification(message, type = 'success', icon = null) {
         const container = document.querySelector('.notification-container');
@@ -52,74 +54,85 @@
         }, 3000);
     }
 
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const productId = this.dataset.productId;
-        {% if request.user.is_authenticated %}
-            fetch(`/cart/add/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total);
-                    showNotification(data.message, 'success', 'bi bi-cart');
-                } else {
-                    // Очищаем сообщение от квадратных скобок
-                    const errorMsg = data.message.replace(/^\[|\]$/g, '');
-                    showNotification(errorMsg, 'error', 'bi bi-exclamation-triangle');
-                }
-            })
-            .catch(() => {
-                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
-            });
-        {% else %}
-            window.location.href = "{% url 'login' %}?next={{ request.path }}";
-        {% endif %}
-    });
-});
-
     function updateCartCounter(count) {
         document.querySelectorAll('.cart-counter').forEach(el => {
             el.textContent = count;
         });
     }
-    document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const productId = this.dataset.productId;
-        {% if request.user.is_authenticated %}
-            fetch(`/wishlist/add/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification('Товар добавлен в избранное', 'success', 'bi bi-heart');
-                } else {
-                    const errorMessage = data.error
-                        ? data.error.replace(/^\[|\]$/g, '')
-                        : 'Недостаточно товара в наличии';
-                    showNotification(errorMessage, 'error', 'bi bi-exclamation-triangle');
-                }
-            })
-            .catch(() => {
-                showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
-            });
-        {% else %}
-            window.location.href = "{% url 'login' %}?next={{ request.path }}";
-        {% endif %}
-    });
-});
-</script>
 
+    function updateWishlistCounter(count) {
+        document.querySelectorAll('.wishlist-counter').forEach(el => {
+            el.textContent = count;
+            el.style.display = count > 0 ? 'block' : 'none';
+        });
+    }
+
+    // Обработчик кнопки "В корзину"
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            {% if request.user.is_authenticated %}
+                fetch(`/cart/add/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartCounter(data.cart_total);
+                        showNotification(data.message, 'success', 'bi bi-cart');
+                    } else {
+                        const errorMsg = data.message.replace(/^\[|\]$/g, '');
+                        showNotification(errorMsg, 'error', 'bi bi-exclamation-triangle');
+                    }
+                })
+                .catch(() => {
+                    showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+                });
+            {% else %}
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+            {% endif %}
+        });
+    });
+
+    // Обработчик кнопки "В избранное"
+    document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            const icon = this.querySelector('i');
+
+            {% if request.user.is_authenticated %}
+                fetch(`/wishlist/toggle/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        icon.classList.toggle('bi-heart');
+                        icon.classList.toggle('bi-heart-fill');
+                        updateWishlistCounter(data.wishlist_count);
+                        const notificationType = data.is_added ? 'success' : 'info';
+                        showNotification(data.message, notificationType, 'bi bi-heart');
+                    } else {
+                        showNotification(data.message, 'error', 'bi bi-exclamation-triangle');
+                    }
+                })
+                .catch(() => {
+                    showNotification('Ошибка соединения', 'error', 'bi bi-exclamation-triangle');
+                });
+            {% else %}
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+            {% endif %}
+        });
+    });
+</script>
 {% endblock %}

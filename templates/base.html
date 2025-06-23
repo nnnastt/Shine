@@ -47,7 +47,14 @@
         <!-- Иконки -->
         <div class="shine-header-icons">
             <a class="shine-icon-btn" href="{% url 'helper' %}"><i class="bi bi-question-circle"></i></a>
-            <a class="shine-icon-btn" href=""><i class="bi bi-heart"></i></a>
+            <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_wishlist' %}{% else %}{% url 'login' %}?next={% url 'view_wishlist' %}{% endif %}">
+                <i class="bi bi-heart"></i>
+                {% if request.user.is_authenticated and wishlist_items_count > 0 %}
+                <span class="wishlist-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
+                    {{ wishlist_items_count }}
+                </span>
+                {% endif %}
+            </a>
             <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_cart' %}{% else %}{% url 'login' %}?next={% url 'view_cart' %}{% endif %}">
                 <i class="bi bi-bag"></i>
                 {% if request.user.is_authenticated and cart_items_count > 0 %}
@@ -57,7 +64,7 @@
                 {% endif %}
             </a>
             {% if request.user.is_superuser %}
-                <a class="shine-icon-btn" href="#"><i class="bi bi-person-gear"></i></a>
+                <a class="shine-icon-btn" href="{% url 'panel_admina' %}"><i class="bi bi-person-gear"></i></a>
                 <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>
             {% elif request.user.is_authenticated %}
                 <a class="shine-icon-btn" href="{% url 'profile' %}"><i class="bi bi-person-check"></i></a>
@@ -65,7 +72,6 @@
             {% else %}
                 <a class="shine-icon-btn" href="{% url 'login' %}"><i class="bi bi-person-add"></i></a>
             {% endif %}
-
         </div>
     </div>
 </header>
@@ -81,7 +87,6 @@
             <a class="shine-mobile-nav-link" href="{% url 'catalog' %}">Каталог</a>
             <a class="shine-mobile-nav-link" href="{% url 'news' %}">Новинки</a>
             <a class="shine-mobile-nav-link" href="{% url 'gift' %}">Подарки</a>
-
         </nav>
     </div>
 </div>
@@ -114,15 +119,12 @@
                 <a href="{% url 'about' %}" class="shine-footer-link d-block">О нас</a>
                 <a href="{% url 'FAQ' %}" class="shine-footer-link d-block">Вопрос-Ответ</a>
                 <a href="{% url 'delivery' %}" class="shine-footer-link d-block">Доставка и оплата</a>
-
-
             </div>
 
             <div class="shine-footer-col col-12 col-xl-3 mt-4 mt-xl-0">
                 <h6 class="shine-footer-title text-center text-xl-start">Связаться с нами</h6>
                 <p class="shine-footer-contact text-center text-xl-start">Тел.: +7 (989) 999-99-99</p>
                 <p class="shine-footer-contact text-center text-xl-start">E-mail: shine@gmail.com</p>
-
             </div>
 
             <div class="shine-footer-col col-12 col-xl-3 mt-4 mt-xl-0">
@@ -139,22 +141,29 @@
         </div>
     </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Нижняя панель для мобильных -->
+
+<!-- Нижняя панель для мобильных -->
 <div class="shine-mobile-bottom-bar d-lg-none">
     <div class="shine-mobile-icons">
         <a class="shine-icon-btn" href="{% url 'helper' %}"><i class="bi bi-question-circle"></i></a>
-        <a class="shine-icon-btn" href=""><i class="bi bi-heart"></i></a>
+        <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_wishlist' %}{% else %}{% url 'login' %}?next={% url 'view_wishlist' %}{% endif %}">
+            <i class="bi bi-heart"></i>
+            {% if request.user.is_authenticated and wishlist_items_count > 0 %}
+            <span class="wishlist-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
+                {{ wishlist_items_count }}
+            </span>
+            {% endif %}
+        </a>
         <a class="shine-icon-btn position-relative" href="{% if request.user.is_authenticated %}{% url 'view_cart' %}{% else %}{% url 'login' %}?next={% url 'view_cart' %}{% endif %}">
             <i class="bi bi-bag"></i>
             {% if request.user.is_authenticated and cart_items_count > 0 %}
-            <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 8px;">
+            <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
                 {{ cart_items_count }}
             </span>
             {% endif %}
         </a>
         {% if request.user.is_superuser %}
-            <a class="shine-icon-btn" href="#"><i class="bi bi-person-gear"></i></a>
+            <a class="shine-icon-btn" href="{% url 'panel_admina' %}"><i class="bi bi-person-gear"></i></a>
             <a class="shine-icon-btn" href="{% url 'logout_view' %}"><i class="bi bi-box-arrow-right"></i></a>
         {% elif request.user.is_authenticated %}
             <a class="shine-icon-btn" href="{% url 'profile' %}"><i class="bi bi-person-check"></i></a>
@@ -165,6 +174,20 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <div class="notification-container"></div>
+<script>
+    function updateWishlistCounter(count) {
+        document.querySelectorAll('.wishlist-counter').forEach(el => {
+            el.textContent = count;
+            // Убедитесь, что счетчик становится видимым при count > 0
+            if (count > 0) {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'none';
+            }
+        });
+    }
+</script>
 </body>
 </html>

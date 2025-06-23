@@ -10,8 +10,13 @@
     <div class="odp-status-container">
         <span class="odp-status-label">Статус:</span>
         <span class="odp-status-value">{{ order.get_status_display }}</span>
+        {% if order.status == 'cancelled' and order.cancellation_reason %}
+            <span class="odp-status-label" style="color:red;">Причина:</span>
+            <span class="odp-status-value" style="color:red;">{{ order.cancellation_reason }}</span>
+        {% endif %}
         <span class="odp-order-date">от {{ order.order_date|date:"d.m.Y H:i" }}</span>
     </div>
+
 
     <div class="odp-layout-grid">
         <div class="odp-products-section">
@@ -56,6 +61,9 @@
                 <p class="odp-info-text">{{ order.shipping_address.address_line1 }}</p>
                 <p class="odp-info-text">{{ order.shipping_address.city }}, {{ order.shipping_address.postal_code }}</p>
                 <p class="odp-info-text">Дата доставки: {{ order.delivery_date|date:"d.m.Y" }} {{ order.delivery_time }}</p>
+                {% if order.tracking_number %}
+                <p class="odp-info-text">Трек-номер: {{ order.tracking_number }}</p>
+                {% endif %}
             </div>
 
             <div class="odp-info-block">
@@ -68,8 +76,19 @@
             <div class="odp-info-block">
                 <h3 class="odp-info-title">Контактная информация</h3>
                 <p class="odp-info-text">Телефон: {{ order.phone }}</p>
+                <p class="odp-info-text">Email: {{ order.email }}</p>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .odp-cancellation-notice {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+</style>
 {% endblock %}

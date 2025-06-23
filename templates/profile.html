@@ -268,11 +268,11 @@
                 <div class="shine-order-card">
                     <div class="shine-order-header">
                         <span class="shine-order-number">Заказ #{{ order.id }}</span>
-                        <span class="shine-order-date">{{ order.created_at|date:"d.m.Y" }}</span>
+                        <span class="shine-order-date">Дата доставки: {{ order.delivery_date|date:"d.m.Y" }} {{ order.delivery_time }}</span>
                     </div>
                     <div class="shine-order-body">
                         <div class="shine-order-summary">
-                            <span class="shine-order-status">{{ order.get_status_display }}</span>
+                            <span class="shine-order-status shine-status-{{ order.status }}">{{ order.get_status_display }}</span>
                             <span class="shine-order-total">{{ order.total }} ₽</span>
                         </div>
                         <div class="shine-order-actions">
@@ -294,46 +294,82 @@
 </div>
 
 <style>
-    /* Стили для кнопки удаления */
-    .shine-btn-delete {
-        background: none;
-        border: none;
-        color: #dc3545;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-size: 16px;
-    }
+    /* Стили для статусов заказов */
+.shine-order-status {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Bellota", system-ui;
+}
 
-    .shine-btn-delete:hover {
-        color: #c82333;
-        background: rgba(220, 53, 69, 0.1);
-    }
+.shine-status-pending {display: inline-block;
+    border: 1px solid #6c757d;
 
-    /* Стили для формы срока действия карты */
-    #id_card_expiry {
-        width: 100%;
-        padding: 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 15px;
-    }
+    color: #6c757d;
+}
 
-    .form-error {
-        color: #dc3545;
-        font-size: 13px;
-        margin-top: 5px;
-        display: none;
-    }
+.shine-status-processing {
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
 
-    .form-control {
-        width: 100%;
-        padding: 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 15px;
-    }
+.shine-status-shipped {
+    color: #17a2b8;
+    border: 1px solid #17a2b8;
+
+}
+
+.shine-status-delivered {
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.shine-status-cancelled {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+/* Стили для кнопки удаления */
+.shine-btn-delete {
+    background: none;
+    border: none;
+    color: #dc3545;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.shine-btn-delete:hover {
+    color: #c82333;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+/* Стили для формы срока действия карты */
+#id_card_expiry {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.form-error {
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 5px;
+    display: none;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
 </style>
 
 <script>

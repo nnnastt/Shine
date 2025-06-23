@@ -130,7 +130,7 @@
                     <span>Стоимость товаров:</span>
                     <span>{{ cart.total_price }} ₽</span>
                 </div>
-                <div class="total-row">
+                <div class="total-row grand-total">
                     <span>Доставка:</span>
                     <span>450 ₽</span>
                 </div>
@@ -145,7 +145,8 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Показываем/скрываем поля нового адреса
@@ -277,6 +278,72 @@
                         alert('Произошла ошибка, попробуйте ещё раз');
                     });
             });
+        }
+        $('#phone').mask('+7 (000) 000-00-00', {placeholder: "+7 (___) ___-__-__"});
+        $('#postal_code').mask('000000', {placeholder: "______"});
+        $('#card_number').mask('0000 0000 0000 0000', {placeholder: "____ ____ ____ ____"});
+        $('#card_expiry').mask('00/00', {placeholder: "MM/YY"});
+        $('#card_cvv').mask('000', {placeholder: "___"});
+
+        // Функции валидации
+        function validatePhone() {
+            const phone = $('#phone').val();
+            const isValid = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(phone);
+            $('#phone-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validatePostalCode() {
+            const postalCode = $('#postal_code').val();
+            const isValid = /^\d{6}$/.test(postalCode);
+            $('#postal-code-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateCardNumber() {
+            const cardNumber = $('#card_number').val().replace(/\s/g, '');
+            const isValid = /^\d{16}$/.test(cardNumber);
+            $('#card-number-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateCardExpiry() {
+            const expiry = $('#card_expiry').val();
+            const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry);
+            $('#card-expiry-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateCardCvv() {
+            const cvv = $('#card_cvv').val();
+            const isValid = /^\d{3}$/.test(cvv);
+            $('#card-cvv-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateDeliveryDate() {
+            const date = $('#delivery_date').val();
+            const isValid = date !== '';
+            $('#delivery-date-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateDeliveryTime() {
+            const time = $('#delivery_time').val();
+            const isValid = time !== '';
+            $('#delivery-time-error').toggle(!isValid);
+            return isValid;
+        }
+
+        function validateRequiredFields(fields) {
+            let allValid = true;
+            fields.forEach(field => {
+                const value = $(field.id).val();
+                const isValid = value.trim() !== '';
+                $(field.errorId).toggle(!isValid);
+                if (!isValid) allValid = false;
+            });
+            return allValid;
         }
     });
 </script>
