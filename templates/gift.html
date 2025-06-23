@@ -1,7 +1,206 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Подарки | Shine {% endblock %}
+{% block title %} Акции | Shine {% endblock %}
 {% block content %}
 
+<section class="shine-promo-section">
+    <div class="shine-promo-container">
+        <div class="shine-promo-header">
+            <h1 class="shine-promo-title">Акции и специальные предложения</h1>
+            <p class="shine-promo-subtitle">Выгодные условия для наших клиентов</p>
+        </div>
+
+        <div class="shine-promo-grid">
+            <!-- Акция 1 - День рождения -->
+            <div class="shine-promo-card ">
+                <div class="shine-promo-card-image">
+                    <img src="{% static 'pic/gift/1.webp' %}" alt="День рождения" class="shine-promo-img">
+                </div>
+                <div class="shine-promo-card-body">
+                    <h3 class="shine-promo-card-title">Скидка 20% в день рождения</h3>
+                    <p class="shine-promo-card-text">Укажите дату рождения в профиле, и в честь ДР получите скидку 20% на весь заказ в.</p>
+                    <div class="shine-promo-card-dates">
+                        <span class="shine-promo-date">Действует постоянно</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Акция 2 - Подарок -->
+            <div class="shine-promo-card">
+                <div class="shine-promo-card-image">
+                    <img src="{% static 'pic/gift/2.webp' %}" alt="Подарок" class="shine-promo-img">
+                </div>
+                <div class="shine-promo-card-body">
+                    <h3 class="shine-promo-card-title">Подарок при заказе от 100 000 ₽</h3>
+                    <p class="shine-promo-card-text">При заказе на сумму от 100 000 ₽ мы дарим вам стильный футляр для украшений в подарок.</p>
+                    <div class="shine-promo-card-dates">
+                        <span class="shine-promo-date">До 30 декабря 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Акция 3 - Скидка на второе изделие -->
+            <div class="shine-promo-card">
+                <div class="shine-promo-card-image">
+                    <img src="{% static 'pic/gift/3.webp' %}" alt="Второе изделие" class="shine-promo-img">
+                </div>
+                <div class="shine-promo-card-body">
+                    <h3 class="shine-promo-card-title">Скидка 15% только сегодня</h3>
+                    <p class="shine-promo-card-text">Сегодня некоторые товары со скидкой в 15%.</p>
+                    <div class="shine-promo-card-dates">
+                        <span class="shine-promo-date">Действует только сегодня</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+    .shine-promo-section {
+        padding: 150px 20px;
+        background-color: #fff;
+    }
+
+    .shine-promo-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .shine-promo-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .shine-promo-title {
+        font-family: "Great Vibes", cursive;
+        font-size: 50px;
+        font-weight: 400;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .shine-promo-subtitle {
+        font-family: "Bellota", system-ui;
+        font-size: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .shine-promo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 30px;
+    }
+
+    .shine-promo-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .shine-promo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .shine-promo-highlight {
+        border: 2px solid #9F2042;
+    }
+
+    .shine-promo-card-image {
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .shine-promo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .shine-promo-card:hover .shine-promo-img {
+        transform: scale(1.05);
+    }
+
+    .shine-promo-card-body {
+        padding: 25px;
+    }
+
+    .shine-promo-card-title {
+        font-family: "Bellota", system-ui;
+        font-size: 22px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .shine-promo-card-text {
+        font-family: "Bellota", system-ui;
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .shine-promo-card-dates {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .shine-promo-date {
+        font-family: "Bellota", system-ui;
+        font-size: 14px;
+        color: #888;
+        font-style: italic;
+    }
+
+    @media (max-width: 991.98px) {
+        .shine-promo-grid {
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+
+        .shine-promo-title {
+            font-size: 42px;
+        }
+
+        .shine-promo-subtitle {
+            font-size: 18px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .shine-promo-section {
+            padding: 70px 15px;
+        }
+
+        .shine-promo-header {
+            margin-bottom: 40px;
+        }
+
+        .shine-promo-title {
+            font-size: 35px;
+        }
+
+        .shine-promo-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .shine-promo-title {
+            font-size: 30px;
+        }
+
+        .shine-promo-card-image {
+            height: 200px;
+        }
+    }
+</style>
 
 {% endblock %}
